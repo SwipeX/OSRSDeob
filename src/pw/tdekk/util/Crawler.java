@@ -26,6 +26,7 @@ public class Crawler {
     private int hash = -1;
 
     public Crawler() {
+        System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 5.1; rv:19.0) Gecko/20100101 Firefox/19.0");
         this.home = "http://oldschool" +
                WORLDS[(int) (Math.random() * WORLDS.length)] + ".runescape.com/";
         this.config = home + "jav_config.ws";

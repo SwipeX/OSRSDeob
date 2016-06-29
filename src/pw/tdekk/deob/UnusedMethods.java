@@ -29,6 +29,7 @@ public class UnusedMethods implements Mutator {
             }
         }));
         toRemove.forEach(m -> {
+            System.out.println(m.owner.name + "." + m.name + m.desc);
             m.owner.methods.remove(m);
             removedCount++;
         });
@@ -54,7 +55,6 @@ public class UnusedMethods implements Mutator {
                     ClassNode node = Application.getClasses().get(owner);
                     MethodNode method = node.getMethod(name, desc);
                     if (method != null) {
-                        visit(method);
                         String superName = node.superName;
                         if (Application.getClasses().containsKey(superName)) {
                             ClassNode superClass = Application.getClasses().get(superName);
@@ -63,13 +63,24 @@ public class UnusedMethods implements Mutator {
                                 visit(superMethod);
                             }
                         }
+                        getSubClasses(node.name).forEach(
+                                sub -> {
+                                    MethodNode superMethod = sub.getMethod(name, desc);
+                                    if (superMethod != null) {
+                                        visit(superMethod);
+                                    }
+                                }
+                        );
+                        visit(method);
                     }
                 }
-                super.visitMethodInsn(opcode, owner, name, desc, itf);
             }
         });
     }
 
+    public List<ClassNode> getSubClasses(String superName) {
+        return Application.getClasses().values().stream().filter(node -> node.superName.equals(superName)).collect(Collectors.toList());
+    }
 
     public List<MethodNode> getEntryPoints() {
         ArrayList<MethodNode> entry = new ArrayList<>();

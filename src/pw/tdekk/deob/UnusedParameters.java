@@ -51,23 +51,23 @@ public class UnusedParameters implements Mutator {
     }
 
     private MethodNode remove(MethodNode mn, List<Integer> targets) {
-        final int[] call = {0};
-        for (ClassNode node : Application.getClasses().values()) {
-            for (MethodNode method : node.methods) {
-                method.accept(new MethodVisitor(Opcodes.ASM5) {
-                    @Override
-                    public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-                        if (owner.equals(mn.owner.name) && name.equals(mn.name) && desc.equals(mn.desc)) {
-                            call[0]++;
-                            //alter param loads to not have @targets
-                        }
-                        super.visitMethodInsn(opcode, owner, name, desc, itf);
-                    }
-                });
-
-            }
-        }
-        System.out.println("Altered "+ call[0] +" calls");
+//        final int[] call = {0};
+//        for (ClassNode node : Application.getClasses().values()) {
+//            for (MethodNode method : node.methods) {
+//                method.accept(new MethodVisitor(Opcodes.ASM5) {
+//                    @Override
+//                    public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
+//                        if (owner.equals(mn.owner.name) && name.equals(mn.name) && desc.equals(mn.desc)) {
+//                            call[0]++;
+//                            //alter param loads to not have @targets
+//                        }
+//                        super.visitMethodInsn(opcode, owner, name, desc, itf);
+//                    }
+//                });
+//
+//            }
+//        }
+      //  System.out.println("Altered "+ call[0] +" calls");
         String newDesc = "(";
         Type[] types = Type.getArgumentTypes(mn.desc);
         for (int i = 0; i < types.length; i++) {
@@ -76,8 +76,8 @@ public class UnusedParameters implements Mutator {
             }
         }
         newDesc += ")" + Type.getReturnType(mn.desc).getDescriptor();
-        System.out.println("changed " + mn.desc + " to " + newDesc);
-        mn.desc = newDesc;
+       // System.out.println("changed " + mn.desc + " to " + newDesc);
+       // mn.desc = newDesc;
         return mn;
     }
 }

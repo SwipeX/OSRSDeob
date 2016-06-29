@@ -1,7 +1,8 @@
 package pw.tdekk;
 
 
-import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.*;
 import pw.tdekk.deob.Mutator;
 import pw.tdekk.deob.UnusedMethods;
 import pw.tdekk.deob.UnusedParameters;
@@ -13,13 +14,15 @@ import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarFile;
 
+import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
+
 
 /**
  * Created by TimD on 6/16/2016.
  */
 public class Application {
     private static JarFile OSRS;
-    private static Mutator[] mutators = new Mutator[]{new UnusedMethods(),new UnusedParameters()};
+    private static Mutator[] mutators = new Mutator[]{new UnusedMethods(), new UnusedParameters()};
     private static ConcurrentHashMap<String, ClassNode> classes;
 
     public static void main(String[] args) {
@@ -41,6 +44,11 @@ public class Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void krek(Throwable t) {
+        System.out.println(t);
+        t.printStackTrace();
     }
 
     public static ConcurrentHashMap<String, ClassNode> getClasses() {

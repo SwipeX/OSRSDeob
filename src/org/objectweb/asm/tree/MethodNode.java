@@ -466,12 +466,17 @@ public class MethodNode extends MethodVisitor {
 
     @Override
     public void visitJumpInsn(final int opcode, final Label label) {
-        instructions.add(new JumpInsnNode(opcode, getLabelNode(label)));
+        LabelNode labelNode = getLabelNode(label);
+        JumpInsnNode jump = new JumpInsnNode(opcode, labelNode);
+        jump.target = instructions.indexOf(labelNode);
+        instructions.add(jump);
     }
 
     @Override
     public void visitLabel(final Label label) {
-        instructions.add(getLabelNode(label));
+        LabelNode node = getLabelNode(label);
+        instructions.add(node);
+        label.position = instructions.indexOf(node);
     }
 
     @Override

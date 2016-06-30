@@ -48,6 +48,11 @@ public class JumpInsnNode extends AbstractInsnNode {
     public LabelNode label;
 
     /**
+     * Indicates what line number this instruction may jump to.
+     */
+    public int target;
+
+    /**
      * Constructs a new {@link JumpInsnNode}.
      * 
      * @param opcode

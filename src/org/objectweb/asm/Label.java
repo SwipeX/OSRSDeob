@@ -142,7 +142,7 @@ public class Label {
     /**
      * The position of this label in the code, if known.
      */
-    int position;
+    public int position;
 
     /**
      * Number of forward references to this label, times two.
@@ -275,10 +275,7 @@ public class Label {
      *             if this label is not resolved yet.
      */
     public int getOffset() {
-        if ((status & RESOLVED) == 0) {
-            throw new IllegalStateException(
-                    "Label offset position has not been resolved yet");
-        }
+        if ((status & RESOLVED) == 0) return -1;
         return position;
     }
 

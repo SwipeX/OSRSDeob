@@ -249,6 +249,7 @@ public class Label {
      * @see MethodWriter#visitMaxs
      */
     Label next;
+   public int k=0;
 
     // ------------------------------------------------------------------------
     // Constructor

@@ -26,13 +26,9 @@ public class UnusedMethods implements Mutator {
         Application.getClasses().values().forEach(c -> c.methods.forEach(m -> {
             if (!usedMethods.contains(m.getHandle())) {
                 toRemove.add(m);
+                removedCount++;
             }
         }));
-        toRemove.forEach(m -> {
-            System.out.println(m.owner.name + "." + m.name + m.desc);
-            m.owner.methods.remove(m);
-            removedCount++;
-        });
         System.out.println(String.format("Removed %s methods in %s ms", removedCount, (System.currentTimeMillis() - startTime)));
     }
 

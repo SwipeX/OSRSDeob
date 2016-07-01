@@ -2,19 +2,19 @@
  * ASM: a very small and fast Java bytecode manipulation framework
  * Copyright (c) 2000-2011 INRIA, France Telecom
  * All rights reserved.
- *
+ * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
+ * notice, this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
  * 3. Neither the name of the copyright holders nor the names of its
- *    contributors may be used to endorse or promote products derived from
- *    this software without specific prior written permission.
- *
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -35,10 +35,12 @@ import java.util.Map;
 
 import org.objectweb.asm.MethodVisitor;
 
+import static org.objectweb.asm.Opcodes.OPCODES;
+
 /**
  * A node that represents a bytecode instruction. <i>An instruction can appear
  * at most once in at most one {@link InsnList} at a time</i>.
- * 
+ *
  * @author Eric Bruneton
  */
 public abstract class AbstractInsnNode {
@@ -133,7 +135,7 @@ public abstract class AbstractInsnNode {
      * only used for real instructions (i.e. not for labels, frames, or line
      * number nodes). This list is a list of {@link TypeAnnotationNode} objects.
      * May be <tt>null</tt>.
-     * 
+     *
      * @associates org.objectweb.asm.tree.TypeAnnotationNode
      * @label visible
      */
@@ -144,7 +146,7 @@ public abstract class AbstractInsnNode {
      * only used for real instructions (i.e. not for labels, frames, or line
      * number nodes). This list is a list of {@link TypeAnnotationNode} objects.
      * May be <tt>null</tt>.
-     * 
+     *
      * @associates org.objectweb.asm.tree.TypeAnnotationNode
      * @label invisible
      */
@@ -170,9 +172,8 @@ public abstract class AbstractInsnNode {
 
     /**
      * Constructs a new {@link AbstractInsnNode}.
-     * 
-     * @param opcode
-     *            the opcode of the instruction to be constructed.
+     *
+     * @param opcode the opcode of the instruction to be constructed.
      */
     protected AbstractInsnNode(final int opcode) {
         this.opcode = opcode;
@@ -181,7 +182,7 @@ public abstract class AbstractInsnNode {
 
     /**
      * Returns the opcode of this instruction.
-     * 
+     *
      * @return the opcode of this instruction.
      */
     public int getOpcode() {
@@ -190,18 +191,18 @@ public abstract class AbstractInsnNode {
 
     /**
      * Returns the type of this instruction.
-     * 
+     *
      * @return the type of this instruction, i.e. one the constants defined in
-     *         this class.
+     * this class.
      */
     public abstract int getType();
 
     /**
      * Returns the previous instruction in the list to which this instruction
      * belongs, if any.
-     * 
+     *
      * @return the previous instruction in the list to which this instruction
-     *         belongs, if any. May be <tt>null</tt>.
+     * belongs, if any. May be <tt>null</tt>.
      */
     public AbstractInsnNode getPrevious() {
         return prev;
@@ -210,9 +211,9 @@ public abstract class AbstractInsnNode {
     /**
      * Returns the next instruction in the list to which this instruction
      * belongs, if any.
-     * 
+     *
      * @return the next instruction in the list to which this instruction
-     *         belongs, if any. May be <tt>null</tt>.
+     * belongs, if any. May be <tt>null</tt>.
      */
     public AbstractInsnNode getNext() {
         return next;
@@ -220,17 +221,15 @@ public abstract class AbstractInsnNode {
 
     /**
      * Makes the given code visitor visit this instruction.
-     * 
-     * @param cv
-     *            a code visitor.
+     *
+     * @param cv a code visitor.
      */
     public abstract void accept(final MethodVisitor cv);
 
     /**
      * Makes the given visitor visit the annotations of this instruction.
-     * 
-     * @param mv
-     *            a method visitor.
+     *
+     * @param mv a method visitor.
      */
     protected final void acceptAnnotations(final MethodVisitor mv) {
         int n = visibleTypeAnnotations == null ? 0 : visibleTypeAnnotations
@@ -251,40 +250,35 @@ public abstract class AbstractInsnNode {
 
     /**
      * Returns a copy of this instruction.
-     * 
-     * @param labels
-     *            a map from LabelNodes to cloned LabelNodes.
+     *
+     * @param labels a map from LabelNodes to cloned LabelNodes.
      * @return a copy of this instruction. The returned instruction does not
-     *         belong to any {@link InsnList}.
+     * belong to any {@link InsnList}.
      */
     public abstract AbstractInsnNode clone(
             final Map<LabelNode, LabelNode> labels);
 
     /**
      * Returns the clone of the given label.
-     * 
-     * @param label
-     *            a label.
-     * @param map
-     *            a map from LabelNodes to cloned LabelNodes.
+     *
+     * @param label a label.
+     * @param map   a map from LabelNodes to cloned LabelNodes.
      * @return the clone of the given label.
      */
     static LabelNode clone(final LabelNode label,
-            final Map<LabelNode, LabelNode> map) {
+                           final Map<LabelNode, LabelNode> map) {
         return map.get(label);
     }
 
     /**
      * Returns the clones of the given labels.
-     * 
-     * @param labels
-     *            a list of labels.
-     * @param map
-     *            a map from LabelNodes to cloned LabelNodes.
+     *
+     * @param labels a list of labels.
+     * @param map    a map from LabelNodes to cloned LabelNodes.
      * @return the clones of the given labels.
      */
     static LabelNode[] clone(final List<LabelNode> labels,
-            final Map<LabelNode, LabelNode> map) {
+                             final Map<LabelNode, LabelNode> map) {
         LabelNode[] clones = new LabelNode[labels.size()];
         for (int i = 0; i < clones.length; ++i) {
             clones[i] = map.get(labels.get(i));
@@ -294,9 +288,8 @@ public abstract class AbstractInsnNode {
 
     /**
      * Clones the annotations of the given instruction into this instruction.
-     * 
-     * @param insn
-     *            the source instruction.
+     *
+     * @param insn the source instruction.
      * @return this instruction.
      */
     protected final AbstractInsnNode cloneAnnotations(
@@ -322,5 +315,88 @@ public abstract class AbstractInsnNode {
             }
         }
         return this;
+    }
+
+    public String toString() {
+        int op = opcode;
+        if (op == -1) {
+            if (this instanceof LabelNode)
+                return "Label";
+            if (this instanceof LineNumberNode)
+                return ((LineNumberNode) this).line + " line";
+            return "Op: -1";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(OPCODES[op]);
+        switch (getType()) {
+            case INT_INSN:
+                sb.append(' ');
+                sb.append(((IntInsnNode) this).operand);
+                break;
+            case VAR_INSN:
+                sb.append(' ');
+                sb.append('#');
+                sb.append(((VarInsnNode) this).var);
+                break;
+            case TYPE_INSN:
+                sb.append(' ');
+                sb.append(((TypeInsnNode) this).desc);
+                break;
+            case FIELD_INSN:
+                FieldInsnNode fin = (FieldInsnNode) this;
+                sb.append(' ');
+                sb.append(fin.owner);
+                sb.append('.');
+                sb.append(fin.name);
+                sb.append(' ');
+                sb.append(fin.desc);
+                break;
+            case METHOD_INSN:
+                MethodInsnNode min = (MethodInsnNode) this;
+                sb.append(' ');
+                sb.append(min.owner);
+                sb.append('.');
+                sb.append(min.name);
+                sb.append(' ');
+                sb.append(min.desc);
+                break;
+            case JUMP_INSN:
+                break;
+            case LDC_INSN:
+                Object cst = ((LdcInsnNode) this).cst;
+                sb.append(' ');
+                sb.append(cst.getClass().getName());
+                sb.append(' ');
+                sb.append(cst);
+                break;
+            case IINC_INSN:
+                IincInsnNode iin = (IincInsnNode) this;
+                sb.append(' ');
+                sb.append('#');
+                sb.append(iin.var);
+                sb.append(' ');
+                sb.append(iin.incr);
+                break;
+            case TABLESWITCH_INSN:
+                break;
+            case LOOKUPSWITCH_INSN:
+                break;
+            case MULTIANEWARRAY_INSN:
+                MultiANewArrayInsnNode m = (MultiANewArrayInsnNode) this;
+                sb.append(' ');
+                sb.append(m.desc);
+                sb.append(' ');
+                sb.append(m.dims);
+                break;
+            case LINE:
+                LineNumberNode lnn = (LineNumberNode) this;
+                sb.append(lnn.line);
+                break;
+            case FRAME:
+                FrameNode fn = (FrameNode) this;
+                fn.local.forEach(l -> sb.append(l));
+                break;
+        }
+        return sb.toString();
     }
 }

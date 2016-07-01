@@ -412,8 +412,8 @@ public class MethodNode extends MethodVisitor {
     }
 
     @Override
-    public void visitInsn(final int opcode) {
-        instructions.add(new InsnNode(opcode));
+    public void visitInsn(final int op) {
+        instructions.add(new InsnNode(op));
     }
 
     @Override

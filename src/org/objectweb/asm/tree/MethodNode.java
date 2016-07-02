@@ -42,6 +42,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
+import pw.tdekk.deob.BasicBlock;
 
 /**
  * A node that represents a method.
@@ -212,6 +213,8 @@ public class MethodNode extends MethodVisitor {
      * If the accept method has been called on this object.
      */
     private boolean visited;
+
+    public BasicBlock[] blocks;
 
     /**
      * Constructs an uninitialized {@link MethodNode}. <i>Subclasses must not
@@ -607,6 +610,7 @@ public class MethodNode extends MethodVisitor {
 
     @Override
     public void visitEnd() {
+        blocks = BasicBlock.getBlocks(this);
     }
 
     /**

@@ -42,7 +42,6 @@ public class Application {
             System.out.println("Running on OSRS #" + version);
             Arrays.stream(mutators).forEach(Mutator::mutate);
             System.out.println("Executed in: " + (System.currentTimeMillis() - startTime));
-            BasicBlock.getBlocks(classes.get("a").getMethod("f","(I)Z"));
             Archive.write(new File("test.jar"), classes);
         } catch (Exception e) {
             e.printStackTrace();

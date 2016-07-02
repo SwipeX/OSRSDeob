@@ -97,11 +97,14 @@ public class BasicBlock {
             AbstractInsnNode node = owner.instructions.get(i);
             if (block == null) {
                 block = new BasicBlock(owner, node);
-                block.setIndex(blocks.size() - 1);
+                AbstractInsnNode prev = node.getPrevious();
+                if (prev instanceof JumpInsnNode && prev.getOpcode() != Opcodes.GOTO)
+                    blocks.get(blocks.size() - 1).referenced.add(block);
+                block.setIndex(blocks.size());
             } else if (jumps.containsKey(i)) { //code can enter here
                 blocks.add(block);
                 block = new BasicBlock(owner, node);
-                block.setIndex(blocks.size() - 1);
+                block.setIndex(blocks.size());
                 block.instructions.add(node);//insn in new block
             } else if (endsBlock(node)) { //end of block
                 block.instructions.add(node);//insn ends old block
@@ -112,16 +115,15 @@ public class BasicBlock {
                     block.instructions.add(node);//add to current block
             }
         }
-        //for jump flow refs
-        //does not seem to be working...
-        for (BasicBlock bb : blocks) {
-            for (Map.Entry<Integer, Integer> entry : jumps.entrySet()) {
-                if (bb.contains(entry.getValue())) {
-                    for (BasicBlock blox : blocks) {
-                        if (blox.contains(entry.getKey())) {
-                            bb.referenced.add(blox);
-                            System.out.println(bb.index + " refs " + blox.index);
-                            break;
+       //set jump refs
+        loop:
+        for (Map.Entry<Integer, Integer> entry : jumps.entrySet()) {
+            for (BasicBlock blox : blocks) {
+                if (blox.contains(entry.getValue())) {
+                    for (BasicBlock bb : blocks) {
+                        if (bb.contains(entry.getKey())) {
+                            blox.referenced.add(bb);
+                            continue loop;
                         }
                     }
                 }

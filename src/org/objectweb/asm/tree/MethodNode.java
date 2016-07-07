@@ -608,6 +608,10 @@ public class MethodNode extends MethodVisitor {
         this.maxLocals = maxLocals;
     }
 
+    public void visitBlock(BasicBlock block){
+
+    }
+
     @Override
     public void visitEnd() {
         blocks = BasicBlock.getBlocks(this);
@@ -834,5 +838,6 @@ public class MethodNode extends MethodVisitor {
             visited = true;
         }
         mv.visitEnd();
+        Arrays.stream(blocks).forEach(b->mv.visitBlock(b));
     }
 }

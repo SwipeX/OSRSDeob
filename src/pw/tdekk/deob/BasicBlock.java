@@ -62,6 +62,7 @@ public class BasicBlock {
         return position <= index && position + instructions.size() > index;
     }
 
+
     /**
      * BELOW THIS POINT ARE STATIC 'BUILDERS' FOR BASIC BLOCKS.
      */
@@ -131,6 +132,16 @@ public class BasicBlock {
         }
         return blocks.toArray(new BasicBlock[blocks.size()]);
     }
+
+    public static BasicBlock containing(BasicBlock[] blocks, int index){
+        for(BasicBlock block : blocks){
+            if(block.contains(index)) {
+                return block;
+            }
+        }
+        return null;
+    }
+
 
     private static boolean endsBlock(AbstractInsnNode node) {
         int op = node.getOpcode();

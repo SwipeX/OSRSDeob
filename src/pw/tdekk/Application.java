@@ -1,13 +1,12 @@
 package pw.tdekk;
 
 
-import org.objectweb.asm.Label;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
-import pw.tdekk.deob.BasicBlock;
 import pw.tdekk.deob.Mutator;
-import pw.tdekk.deob.UnusedMethods;
+import pw.tdekk.deob.UnusedMembers;
 import pw.tdekk.deob.UnusedParameters;
+import pw.tdekk.rs.AbstractIdentifier;
+import pw.tdekk.rs.Node;
 import pw.tdekk.util.Archive;
 import pw.tdekk.util.Crawler;
 
@@ -16,15 +15,14 @@ import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarFile;
 
-import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
-
 
 /**
  * Created by TimD on 6/16/2016.
  */
 public class Application {
     private static JarFile OSRS;
-    private static Mutator[] mutators = new Mutator[]{new UnusedMethods(), new UnusedParameters()};
+    private static Mutator[] mutators = new Mutator[]{new UnusedMembers(), new UnusedParameters()};
+    private static AbstractIdentifier[] identifiers = new AbstractIdentifier[]{new Node()};
     private static ConcurrentHashMap<String, ClassNode> classes;
 
     public static void main(String[] args) {
@@ -41,6 +39,7 @@ public class Application {
             int version = versionVisitor.getVersion();
             System.out.println("Running on OSRS #" + version);
             Arrays.stream(mutators).forEach(Mutator::mutate);
+            Arrays.stream(identifiers).forEach(i ->{ i.setIdentified(i.Identify()); i.Process();});
             System.out.println("Executed in: " + (System.currentTimeMillis() - startTime));
             Archive.write(new File("test.jar"), classes);
         } catch (Exception e) {

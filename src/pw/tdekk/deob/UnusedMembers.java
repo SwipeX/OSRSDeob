@@ -4,6 +4,7 @@ import org.objectweb.asm.Handle;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 import pw.tdekk.Application;
 
@@ -14,22 +15,36 @@ import java.util.stream.Collectors;
 /**
  * Created by TimD on 6/21/2016.
  */
-public class UnusedMethods implements Mutator {
+public class UnusedMembers implements Mutator {
     private ArrayList<Handle> usedMethods = new ArrayList<>();
+    private ArrayList<Handle> usedFields = new ArrayList<>();
     private int removedCount = 0;
+    private int removedFields = 0;
 
     @Override
     public void mutate() {
         long startTime = System.currentTimeMillis();
         getEntryPoints().forEach(this::visit);
         ArrayList<MethodNode> toRemove = new ArrayList<>();
-        Application.getClasses().values().forEach(c -> c.methods.forEach(m -> {
-            if (!usedMethods.contains(m.getHandle())) {
-                toRemove.add(m);
-                removedCount++;
-            }
-        }));
-        System.out.println(String.format("Removed %s methods in %s ms", removedCount, (System.currentTimeMillis() - startTime)));
+        ArrayList<FieldNode> fields = new ArrayList<>();
+        Application.getClasses().values().forEach(c -> {
+            c.methods.forEach(m -> {
+                if (!usedMethods.contains(m.getHandle())) {
+                    toRemove.add(m);
+                    removedCount++;
+                }
+            });
+            c.fields.forEach(f -> {
+                if (!usedFields.contains(f.getHandle())) {
+                    fields.add(f);
+                    removedFields++;
+                }
+            });
+
+        });
+        toRemove.forEach(m -> m.owner.methods.remove(m));
+        fields.forEach(f -> f.owner.fields.remove(f));
+        System.out.println(String.format("Removed %s methods and %s fields in %s ms", removedCount, removedFields, (System.currentTimeMillis() - startTime)));
     }
 
     private void visit(MethodNode mn) {
@@ -45,6 +60,24 @@ public class UnusedMethods implements Mutator {
             });
         }
         mn.accept(new MethodVisitor(Opcodes.ASM5) {
+            @Override
+            public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+                Handle handle = new Handle(0, owner, name, desc, false);
+                if (!usedFields.contains(handle)) {
+                    usedFields.add(handle);
+                    ClassNode node = Application.getClasses().get(owner);
+                    if (node != null) {
+                        String superName = node.superName;
+                        if (Application.getClasses().containsKey(superName)) {
+                            ClassNode superClass = Application.getClasses().get(superName);
+                            if (superClass.getField(name, desc) != null)
+                                usedFields.add(new Handle(0, superName, name, desc, false));
+                        }
+                    }
+                    getSubClasses(owner).forEach(sub -> usedFields.add(new Handle(0, sub.name, name, desc, false)));
+                }
+            }
+
             @Override
             public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
                 if (Application.getClasses().containsKey(owner)) {

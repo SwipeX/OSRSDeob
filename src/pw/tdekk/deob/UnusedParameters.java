@@ -4,13 +4,12 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.Method;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.ParameterNode;
+import org.objectweb.asm.tree.*;
 import pw.tdekk.Application;
 import pw.tdekk.test.App;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,7 +50,8 @@ public class UnusedParameters implements Mutator {
     }
 
     private MethodNode remove(MethodNode mn, List<Integer> targets) {
-//        final int[] call = {0};
+
+        //        final int[] call = {0};
 //        for (ClassNode node : Application.getClasses().values()) {
 //            for (MethodNode method : node.methods) {
 //                method.accept(new MethodVisitor(Opcodes.ASM5) {
@@ -67,17 +67,36 @@ public class UnusedParameters implements Mutator {
 //
 //            }
 //        }
-      //  System.out.println("Altered "+ call[0] +" calls");
+        //  System.out.println("Altered "+ call[0] +" calls");
         String newDesc = "(";
         Type[] types = Type.getArgumentTypes(mn.desc);
-        for (int i = 0; i < types.length; i++) {
+        for (
+                int i = 0;
+                i < types.length; i++)
+
+        {
             if (!targets.contains(i)) {
                 newDesc += types[i].getDescriptor();
             }
         }
+
         newDesc += ")" + Type.getReturnType(mn.desc).getDescriptor();
-       // System.out.println("changed " + mn.desc + " to " + newDesc);
-       // mn.desc = newDesc;
+
+      //  System.out.println(mn.owner.name+'.'+mn.name+ " "+mn.desc + " -> " + newDesc);
+
+//        for (ClassNode node : Application.getClasses().values()) {
+//            for (MethodNode method : node.methods) {
+//                Arrays.stream(method.instructions.toArray()).filter(a -> a instanceof MethodInsnNode).forEach(a -> {
+//                    MethodInsnNode min = (MethodInsnNode) a;
+//                    if (min.owner.equals(mn.owner.name) && min.name.equals(mn.name) && min.desc.equals(mn.desc)) {
+//                        int idx = method.instructions.indexOf(a);
+//                        System.out.println(BasicBlock.containing(method.blocks, idx));
+//                    }
+//                });
+//            }
+//        }
+        // System.out.println("changed " + mn.desc + " to " + newDesc);
+        //  mn.desc = newDesc;
         return mn;
     }
 }

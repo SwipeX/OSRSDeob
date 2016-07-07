@@ -173,7 +173,7 @@ public class ClassNode extends ClassVisitor {
      * The fields of this class. This list is a list of {@link FieldNode}
      * objects.
      *
-     * @associates org.objectweb.asm.tree.FieldNode
+     * @associates org.objectweb.asm.tree.FieldData
      */
     public List<FieldNode> fields;
 
@@ -181,7 +181,7 @@ public class ClassNode extends ClassVisitor {
      * The methods of this class. This list is a list of {@link MethodNode}
      * objects.
      *
-     * @associates org.objectweb.asm.tree.MethodNode
+     * @associates org.objectweb.asm.tree.MethodData
      */
     public List<MethodNode> methods;
 

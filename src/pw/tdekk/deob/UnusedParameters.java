@@ -52,8 +52,8 @@ public class UnusedParameters implements Mutator {
     private MethodNode remove(MethodNode mn, List<Integer> targets) {
 
         //        final int[] call = {0};
-//        for (ClassNode node : Application.getClasses().values()) {
-//            for (MethodNode method : node.methods) {
+//        for (ClassData node : Application.getClasses().values()) {
+//            for (MethodData method : node.methods) {
 //                method.accept(new MethodVisitor(Opcodes.ASM5) {
 //                    @Override
 //                    public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
@@ -84,8 +84,8 @@ public class UnusedParameters implements Mutator {
 
       //  System.out.println(mn.owner.name+'.'+mn.name+ " "+mn.desc + " -> " + newDesc);
 
-//        for (ClassNode node : Application.getClasses().values()) {
-//            for (MethodNode method : node.methods) {
+//        for (ClassData node : Application.getClasses().values()) {
+//            for (MethodData method : node.methods) {
 //                Arrays.stream(method.instructions.toArray()).filter(a -> a instanceof MethodInsnNode).forEach(a -> {
 //                    MethodInsnNode min = (MethodInsnNode) a;
 //                    if (min.owner.equals(mn.owner.name) && min.name.equals(mn.name) && min.desc.equals(mn.desc)) {

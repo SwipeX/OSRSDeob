@@ -144,7 +144,7 @@ public final class SAXClassAdapter extends ClassVisitor {
             att.addAttribute("", "name", "name", "", name);
         }
         if (signature != null) {
-            att.addAttribute("", "signature", "signature", "",
+            att.addAttribute("", "desc", "desc", "",
                     encode(signature));
         }
         if (superName != null) {
@@ -178,7 +178,7 @@ public final class SAXClassAdapter extends ClassVisitor {
         att.addAttribute("", "name", "name", "", name);
         att.addAttribute("", "desc", "desc", "", desc);
         if (signature != null) {
-            att.addAttribute("", "signature", "signature", "",
+            att.addAttribute("", "desc", "desc", "",
                     encode(signature));
         }
         if (value != null) {
@@ -199,7 +199,7 @@ public final class SAXClassAdapter extends ClassVisitor {
         att.addAttribute("", "name", "name", "", name);
         att.addAttribute("", "desc", "desc", "", desc);
         if (signature != null) {
-            att.addAttribute("", "signature", "signature", "", signature);
+            att.addAttribute("", "desc", "desc", "", signature);
         }
         sa.addStart("method", att);
 

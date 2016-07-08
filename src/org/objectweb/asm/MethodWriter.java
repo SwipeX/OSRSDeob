@@ -144,7 +144,7 @@ class MethodWriter extends MethodVisitor {
     private final String descriptor;
 
     /**
-     * The signature of this method.
+     * The desc of this method.
      */
     String signature;
 
@@ -438,7 +438,7 @@ class MethodWriter extends MethodVisitor {
      * @param desc
      *            the method's descriptor (see {@link Type}).
      * @param signature
-     *            the method's signature. May be <tt>null</tt>.
+     *            the method's desc. May be <tt>null</tt>.
      * @param exceptions
      *            the internal names of the method's exceptions. May be
      *            <tt>null</tt>.

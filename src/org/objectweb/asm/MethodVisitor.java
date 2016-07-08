@@ -156,7 +156,7 @@ public abstract class MethodVisitor {
     }
 
     /**
-     * Visits an annotation on a type in the method signature.
+     * Visits an annotation on a type in the method desc.
      *
      * @param typeRef
      *            a reference to the annotated type. The sort of this type
@@ -773,7 +773,7 @@ public abstract class MethodVisitor {
      * @param desc
      *            the type descriptor of this local variable.
      * @param signature
-     *            the type signature of this local variable. May be
+     *            the type desc of this local variable. May be
      *            <tt>null</tt> if the local variable type does not use generic
      *            types.
      * @param start

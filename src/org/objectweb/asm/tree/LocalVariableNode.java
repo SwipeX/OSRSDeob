@@ -49,7 +49,7 @@ public class LocalVariableNode {
     public String desc;
 
     /**
-     * The signature of this local variable. May be <tt>null</tt>.
+     * The desc of this local variable. May be <tt>null</tt>.
      */
     public String signature;
 
@@ -78,7 +78,7 @@ public class LocalVariableNode {
      * @param desc
      *            the type descriptor of this local variable.
      * @param signature
-     *            the signature of this local variable. May be <tt>null</tt>.
+     *            the desc of this local variable. May be <tt>null</tt>.
      * @param start
      *            the first instruction corresponding to the scope of this local
      *            variable (inclusive).

@@ -60,7 +60,7 @@ public class FieldNode extends FieldVisitor {
     public String desc;
 
     /**
-     * The field's signature. May be <tt>null</tt>.
+     * The field's desc. May be <tt>null</tt>.
      */
     public String signature;
 
@@ -126,7 +126,7 @@ public class FieldNode extends FieldVisitor {
      * @param name      the field's name.
      * @param desc      the field's descriptor (see {@link org.objectweb.asm.Type
      *                  Type}).
-     * @param signature the field's signature.
+     * @param signature the field's desc.
      * @param value     the field's initial value. This parameter, which may be
      *                  <tt>null</tt> if the field does not have an initial value,
      *                  must be an {@link Integer}, a {@link Float}, a {@link Long}, a
@@ -153,7 +153,7 @@ public class FieldNode extends FieldVisitor {
      * @param name      the field's name.
      * @param desc      the field's descriptor (see {@link org.objectweb.asm.Type
      *                  Type}).
-     * @param signature the field's signature.
+     * @param signature the field's desc.
      * @param value     the field's initial value. This parameter, which may be
      *                  <tt>null</tt> if the field does not have an initial value,
      *                  must be an {@link Integer}, a {@link Float}, a {@link Long}, a

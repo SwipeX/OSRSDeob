@@ -32,7 +32,7 @@ package org.objectweb.asm.signature;
 import org.objectweb.asm.Opcodes;
 
 /**
- * A signature visitor that generates signatures in string format.
+ * A desc visitor that generates signatures in string format.
  * 
  * @author Thomas Hallgren
  * @author Eric Bruneton
@@ -40,17 +40,17 @@ import org.objectweb.asm.Opcodes;
 public class SignatureWriter extends SignatureVisitor {
 
     /**
-     * Builder used to construct the signature.
+     * Builder used to construct the desc.
      */
     private final StringBuilder buf = new StringBuilder();
 
     /**
-     * Indicates if the signature contains formal type parameters.
+     * Indicates if the desc contains formal type parameters.
      */
     private boolean hasFormals;
 
     /**
-     * Indicates if the signature contains method parameter types.
+     * Indicates if the desc contains method parameter types.
      */
     private boolean hasParameters;
 
@@ -192,9 +192,9 @@ public class SignatureWriter extends SignatureVisitor {
     }
 
     /**
-     * Returns the signature that was built by this signature writer.
+     * Returns the desc that was built by this desc writer.
      * 
-     * @return the signature that was built by this signature writer.
+     * @return the desc that was built by this desc writer.
      */
     @Override
     public String toString() {
@@ -206,7 +206,7 @@ public class SignatureWriter extends SignatureVisitor {
     // ------------------------------------------------------------------------
 
     /**
-     * Ends the formal type parameters section of the signature.
+     * Ends the formal type parameters section of the desc.
      */
     private void endFormals() {
         if (hasFormals) {

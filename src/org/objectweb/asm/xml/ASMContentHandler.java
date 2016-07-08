@@ -694,7 +694,7 @@ public class ASMContentHandler extends DefaultHandler implements Opcodes {
             vals.put("name", attrs.getValue("name"));
             vals.put("parent", attrs.getValue("parent"));
             vals.put("source", attrs.getValue("source"));
-            vals.put("signature", attrs.getValue("signature"));
+            vals.put("desc", attrs.getValue("desc"));
             vals.put("interfaces", new ArrayList<String>());
             push(vals);
             // values will be extracted in InterfacesRule.end();
@@ -735,7 +735,7 @@ public class ASMContentHandler extends DefaultHandler implements Opcodes {
             int version = ((Integer) vals.get("version")).intValue();
             int access = getAccess((String) vals.get("access"));
             String name = (String) vals.get("name");
-            String signature = (String) vals.get("signature");
+            String signature = (String) vals.get("desc");
             String parent = (String) vals.get("parent");
             ArrayList<?> infs = (ArrayList<?>) vals.get("interfaces");
             String[] interfaces = infs.toArray(new String[infs.size()]);
@@ -783,7 +783,7 @@ public class ASMContentHandler extends DefaultHandler implements Opcodes {
                 throws SAXException {
             int access = getAccess(attrs.getValue("access"));
             String name = attrs.getValue("name");
-            String signature = attrs.getValue("signature");
+            String signature = attrs.getValue("desc");
             String desc = attrs.getValue("desc");
             Object value = getValue(desc, attrs.getValue("value"));
             push(cv.visitField(access, name, desc, signature, value));
@@ -807,7 +807,7 @@ public class ASMContentHandler extends DefaultHandler implements Opcodes {
             vals.put("access", attrs.getValue("access"));
             vals.put("name", attrs.getValue("name"));
             vals.put("desc", attrs.getValue("desc"));
-            vals.put("signature", attrs.getValue("signature"));
+            vals.put("desc", attrs.getValue("desc"));
             vals.put("exceptions", new ArrayList<String>());
             push(vals);
             // values will be extracted in ExceptionsRule.end();
@@ -844,7 +844,7 @@ public class ASMContentHandler extends DefaultHandler implements Opcodes {
             int access = getAccess((String) vals.get("access"));
             String name = (String) vals.get("name");
             String desc = (String) vals.get("desc");
-            String signature = (String) vals.get("signature");
+            String signature = (String) vals.get("desc");
             ArrayList<?> excs = (ArrayList<?>) vals.get("exceptions");
             String[] exceptions = excs.toArray(new String[excs.size()]);
 
@@ -1064,7 +1064,7 @@ public class ASMContentHandler extends DefaultHandler implements Opcodes {
         public final void begin(final String element, final Attributes attrs) {
             String name = attrs.getValue("name");
             String desc = attrs.getValue("desc");
-            String signature = attrs.getValue("signature");
+            String signature = attrs.getValue("desc");
             Label start = getLabel(attrs.getValue("start"));
             Label end = getLabel(attrs.getValue("end"));
             int var = Integer.parseInt(attrs.getValue("var"));

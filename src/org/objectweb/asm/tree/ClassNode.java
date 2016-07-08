@@ -68,7 +68,7 @@ public class ClassNode extends ClassVisitor {
     public String name;
 
     /**
-     * The signature of the class. May be <tt>null</tt>.
+     * The desc of the class. May be <tt>null</tt>.
      */
     public String signature;
 

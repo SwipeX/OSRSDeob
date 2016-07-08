@@ -44,6 +44,7 @@ public class UnusedMembers implements Mutator {
         });
         toRemove.forEach(m -> m.owner.methods.remove(m));
         fields.forEach(f -> f.owner.fields.remove(f));
+        System.out.println(usedMethods.size()+ "methods");
         System.out.println(String.format("Removed %s methods and %s fields in %s ms", removedCount, removedFields, (System.currentTimeMillis() - startTime)));
     }
 

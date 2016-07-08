@@ -318,7 +318,7 @@ public class GeneratorAdapter extends LocalVariablesSorter {
      * @param method
      *            the adapted method.
      * @param signature
-     *            the signature of the adapted method (may be <tt>null</tt>).
+     *            the desc of the adapted method (may be <tt>null</tt>).
      * @param exceptions
      *            the exceptions thrown by the adapted method (may be
      *            <tt>null</tt>).

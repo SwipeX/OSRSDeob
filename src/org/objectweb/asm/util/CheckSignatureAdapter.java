@@ -79,7 +79,7 @@ public class CheckSignatureAdapter extends SignatureVisitor {
     private static final int END = 256;
 
     /**
-     * Type of the signature to be checked.
+     * Type of the desc to be checked.
      */
     private final int type;
 
@@ -89,7 +89,7 @@ public class CheckSignatureAdapter extends SignatureVisitor {
     private int state;
 
     /**
-     * <tt>true</tt> if the checked type signature can be 'V'.
+     * <tt>true</tt> if the checked type desc can be 'V'.
      */
     private boolean canBeVoid;
 
@@ -105,7 +105,7 @@ public class CheckSignatureAdapter extends SignatureVisitor {
      * {@link #CheckSignatureAdapter(int, int, SignatureVisitor)} version.
      * 
      * @param type
-     *            the type of signature to be checked. See
+     *            the type of desc to be checked. See
      *            {@link #CLASS_SIGNATURE}, {@link #METHOD_SIGNATURE} and
      *            {@link #TYPE_SIGNATURE}.
      * @param sv
@@ -123,7 +123,7 @@ public class CheckSignatureAdapter extends SignatureVisitor {
      *            the ASM API version implemented by this visitor. Must be one
      *            of {@link Opcodes#ASM4} or {@link Opcodes#ASM5}.
      * @param type
-     *            the type of signature to be checked. See
+     *            the type of desc to be checked. See
      *            {@link #CLASS_SIGNATURE}, {@link #METHOD_SIGNATURE} and
      *            {@link #TYPE_SIGNATURE}.
      * @param sv

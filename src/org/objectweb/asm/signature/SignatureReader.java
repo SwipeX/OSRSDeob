@@ -30,8 +30,8 @@
 package org.objectweb.asm.signature;
 
 /**
- * A type signature parser to make a signature visitor visit an existing
- * signature.
+ * A type desc parser to make a desc visitor visit an existing
+ * desc.
  * 
  * @author Thomas Hallgren
  * @author Eric Bruneton
@@ -39,12 +39,12 @@ package org.objectweb.asm.signature;
 public class SignatureReader {
 
     /**
-     * The signature to be read.
+     * The desc to be read.
      */
     private final String signature;
 
     /**
-     * Constructs a {@link SignatureReader} for the given signature.
+     * Constructs a {@link SignatureReader} for the given desc.
      * 
      * @param signature
      *            A <i>ClassSignature</i>, <i>MethodTypeSignature</i>, or
@@ -55,19 +55,19 @@ public class SignatureReader {
     }
 
     /**
-     * Makes the given visitor visit the signature of this
-     * {@link SignatureReader}. This signature is the one specified in the
+     * Makes the given visitor visit the desc of this
+     * {@link SignatureReader}. This desc is the one specified in the
      * constructor (see {@link #SignatureReader(String) SignatureReader}). This
      * method is intended to be called on a {@link SignatureReader} that was
-     * created using a <i>ClassSignature</i> (such as the <code>signature</code>
+     * created using a <i>ClassSignature</i> (such as the <code>desc</code>
      * parameter of the {@link org.objectweb.asm.ClassVisitor#visit
      * ClassVisitor.visit} method) or a <i>MethodTypeSignature</i> (such as the
-     * <code>signature</code> parameter of the
+     * <code>desc</code> parameter of the
      * {@link org.objectweb.asm.ClassVisitor#visitMethod
      * ClassVisitor.visitMethod} method).
      * 
      * @param v
-     *            the visitor that must visit this signature.
+     *            the visitor that must visit this desc.
      */
     public void accept(final SignatureVisitor v) {
         String signature = this.signature;
@@ -113,33 +113,33 @@ public class SignatureReader {
     }
 
     /**
-     * Makes the given visitor visit the signature of this
-     * {@link SignatureReader}. This signature is the one specified in the
+     * Makes the given visitor visit the desc of this
+     * {@link SignatureReader}. This desc is the one specified in the
      * constructor (see {@link #SignatureReader(String) SignatureReader}). This
      * method is intended to be called on a {@link SignatureReader} that was
      * created using a <i>FieldTypeSignature</i>, such as the
-     * <code>signature</code> parameter of the
+     * <code>desc</code> parameter of the
      * {@link org.objectweb.asm.ClassVisitor#visitField ClassVisitor.visitField}
      * or {@link org.objectweb.asm.MethodVisitor#visitLocalVariable
      * MethodVisitor.visitLocalVariable} methods.
      * 
      * @param v
-     *            the visitor that must visit this signature.
+     *            the visitor that must visit this desc.
      */
     public void acceptType(final SignatureVisitor v) {
         parseType(this.signature, 0, v);
     }
 
     /**
-     * Parses a field type signature and makes the given visitor visit it.
+     * Parses a field type desc and makes the given visitor visit it.
      * 
      * @param signature
-     *            a string containing the signature that must be parsed.
+     *            a string containing the desc that must be parsed.
      * @param pos
-     *            index of the first character of the signature to parsed.
+     *            index of the first character of the desc to parsed.
      * @param v
-     *            the visitor that must visit this signature.
-     * @return the index of the first character after the parsed signature.
+     *            the visitor that must visit this desc.
+     * @return the index of the first character after the parsed desc.
      */
     private static int parseType(final String signature, int pos,
             final SignatureVisitor v) {

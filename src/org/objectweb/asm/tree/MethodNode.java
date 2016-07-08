@@ -70,7 +70,7 @@ public class MethodNode extends MethodVisitor {
     public String desc;
 
     /**
-     * The method's signature. May be <tt>null</tt>.
+     * The method's desc. May be <tt>null</tt>.
      */
     public String signature;
 
@@ -251,7 +251,7 @@ public class MethodNode extends MethodVisitor {
      *                   deprecated.
      * @param name       the method's name.
      * @param desc       the method's descriptor (see {@link Type}).
-     * @param signature  the method's signature. May be <tt>null</tt>.
+     * @param signature  the method's desc. May be <tt>null</tt>.
      * @param exceptions the internal names of the method's exception classes (see
      *                   {@link Type#getInternalName() getInternalName}). May be
      *                   <tt>null</tt>.
@@ -275,7 +275,7 @@ public class MethodNode extends MethodVisitor {
      *                   deprecated.
      * @param name       the method's name.
      * @param desc       the method's descriptor (see {@link Type}).
-     * @param signature  the method's signature. May be <tt>null</tt>.
+     * @param signature  the method's desc. May be <tt>null</tt>.
      * @param exceptions the internal names of the method's exception classes (see
      *                   {@link Type#getInternalName() getInternalName}). May be
      *                   <tt>null</tt>.

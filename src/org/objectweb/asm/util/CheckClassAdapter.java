@@ -616,10 +616,10 @@ public class CheckClassAdapter extends ClassVisitor {
     }
 
     /**
-     * Checks a class signature.
+     * Checks a class desc.
      * 
      * @param signature
-     *            a string containing the signature that must be checked.
+     *            a string containing the desc that must be checked.
      */
     public static void checkClassSignature(final String signature) {
         // ClassSignature:
@@ -640,10 +640,10 @@ public class CheckClassAdapter extends ClassVisitor {
     }
 
     /**
-     * Checks a method signature.
+     * Checks a method desc.
      * 
      * @param signature
-     *            a string containing the signature that must be checked.
+     *            a string containing the desc that must be checked.
      */
     public static void checkMethodSignature(final String signature) {
         // MethodTypeSignature:
@@ -679,10 +679,10 @@ public class CheckClassAdapter extends ClassVisitor {
     }
 
     /**
-     * Checks a field signature.
+     * Checks a field desc.
      * 
      * @param signature
-     *            a string containing the signature that must be checked.
+     *            a string containing the desc that must be checked.
      */
     public static void checkFieldSignature(final String signature) {
         int pos = checkFieldTypeSignature(signature, 0);
@@ -764,10 +764,10 @@ public class CheckClassAdapter extends ClassVisitor {
     }
 
     /**
-     * Checks the formal type parameters of a class or method signature.
+     * Checks the formal type parameters of a class or method desc.
      * 
      * @param signature
-     *            a string containing the signature that must be checked.
+     *            a string containing the desc that must be checked.
      * @param pos
      *            index of first character to be checked.
      * @return the index of the first character after the checked part.
@@ -785,10 +785,10 @@ public class CheckClassAdapter extends ClassVisitor {
     }
 
     /**
-     * Checks a formal type parameter of a class or method signature.
+     * Checks a formal type parameter of a class or method desc.
      * 
      * @param signature
-     *            a string containing the signature that must be checked.
+     *            a string containing the desc that must be checked.
      * @param pos
      *            index of first character to be checked.
      * @return the index of the first character after the checked part.
@@ -809,10 +809,10 @@ public class CheckClassAdapter extends ClassVisitor {
     }
 
     /**
-     * Checks a field type signature.
+     * Checks a field type desc.
      * 
      * @param signature
-     *            a string containing the signature that must be checked.
+     *            a string containing the desc that must be checked.
      * @param pos
      *            index of first character to be checked.
      * @return the index of the first character after the checked part.
@@ -835,10 +835,10 @@ public class CheckClassAdapter extends ClassVisitor {
     }
 
     /**
-     * Checks a class type signature.
+     * Checks a class type desc.
      * 
      * @param signature
-     *            a string containing the signature that must be checked.
+     *            a string containing the desc that must be checked.
      * @param pos
      *            index of first character to be checked.
      * @return the index of the first character after the checked part.
@@ -866,10 +866,10 @@ public class CheckClassAdapter extends ClassVisitor {
     }
 
     /**
-     * Checks the type arguments in a class type signature.
+     * Checks the type arguments in a class type desc.
      * 
      * @param signature
-     *            a string containing the signature that must be checked.
+     *            a string containing the desc that must be checked.
      * @param pos
      *            index of first character to be checked.
      * @return the index of the first character after the checked part.
@@ -887,10 +887,10 @@ public class CheckClassAdapter extends ClassVisitor {
     }
 
     /**
-     * Checks a type argument in a class type signature.
+     * Checks a type argument in a class type desc.
      * 
      * @param signature
-     *            a string containing the signature that must be checked.
+     *            a string containing the desc that must be checked.
      * @param pos
      *            index of first character to be checked.
      * @return the index of the first character after the checked part.
@@ -909,10 +909,10 @@ public class CheckClassAdapter extends ClassVisitor {
     }
 
     /**
-     * Checks a type variable signature.
+     * Checks a type variable desc.
      * 
      * @param signature
-     *            a string containing the signature that must be checked.
+     *            a string containing the desc that must be checked.
      * @param pos
      *            index of first character to be checked.
      * @return the index of the first character after the checked part.
@@ -928,10 +928,10 @@ public class CheckClassAdapter extends ClassVisitor {
     }
 
     /**
-     * Checks a type signature.
+     * Checks a type desc.
      * 
      * @param signature
-     *            a string containing the signature that must be checked.
+     *            a string containing the desc that must be checked.
      * @param pos
      *            index of first character to be checked.
      * @return the index of the first character after the checked part.
@@ -959,7 +959,7 @@ public class CheckClassAdapter extends ClassVisitor {
      * Checks an identifier.
      * 
      * @param signature
-     *            a string containing the signature that must be checked.
+     *            a string containing the desc that must be checked.
      * @param pos
      *            index of first character to be checked.
      * @return the index of the first character after the checked part.
@@ -980,7 +980,7 @@ public class CheckClassAdapter extends ClassVisitor {
      * Checks a single character.
      * 
      * @param signature
-     *            a string containing the signature that must be checked.
+     *            a string containing the desc that must be checked.
      * @param pos
      *            index of first character to be checked.
      * @return the index of the first character after the checked part.
@@ -994,12 +994,12 @@ public class CheckClassAdapter extends ClassVisitor {
     }
 
     /**
-     * Returns the signature car at the given index.
+     * Returns the desc car at the given index.
      * 
      * @param signature
-     *            a signature.
+     *            a desc.
      * @param pos
-     *            an index in signature.
+     *            an index in desc.
      * @return the character at the given index, or 0 if there is no such
      *         character.
      */

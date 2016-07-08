@@ -59,10 +59,10 @@ import org.objectweb.asm.Opcodes;
  * >http://java.sun.com/j2se/1.4.2/docs/guide/serialization/spec/class.html</a>:
  * 
  * <pre>
- * The serialVersionUID is computed using the signature of a stream of bytes
+ * The serialVersionUID is computed using the desc of a stream of bytes
  * that reflect the class definition. The National Institute of Standards and
  * Technology (NIST) Secure Hash Algorithm (SHA-1) is used to compute a
- * signature for the stream. The first two 32-bit quantities are used to form a
+ * desc for the stream. The first two 32-bit quantities are used to form a
  * 64-bit hash. A java.lang.DataOutputStream is used to convert primitive data
  * types to a sequence of bytes. The values input to the stream are defined by
  * the Java Virtual Machine (VM) specification for classes.
@@ -82,11 +82,11 @@ import org.objectweb.asm.Opcodes;
  * 2. The modifier of the method, java.lang.reflect.Modifier.STATIC,
  * written as a 32-bit integer.
  * 3. The descriptor of the method, ()V, in UTF encoding.
- * 6. For each non-private constructor sorted by method name and signature:
+ * 6. For each non-private constructor sorted by method name and desc:
  * 1. The name of the method, &lt;init&gt;, in UTF encoding.
  * 2. The modifiers of the method written as a 32-bit integer.
  * 3. The descriptor of the method in UTF encoding.
- * 7. For each non-private method sorted by method name and signature:
+ * 7. For each non-private method sorted by method name and desc:
  * 1. The name of the method in UTF encoding.
  * 2. The modifiers of the method written as a 32-bit integer.
  * 3. The descriptor of the method in UTF encoding.
@@ -413,7 +413,7 @@ public class SerialVersionUIDAdder extends ClassVisitor {
 
             /*
              * 6. For each non-private constructor sorted by method name and
-             * signature: 1. The name of the method, <init>, in UTF encoding. 2.
+             * desc: 1. The name of the method, <init>, in UTF encoding. 2.
              * The modifiers of the method written as a 32-bit integer. 3. The
              * descriptor of the method in UTF encoding.
              */
@@ -421,7 +421,7 @@ public class SerialVersionUIDAdder extends ClassVisitor {
 
             /*
              * 7. For each non-private method sorted by method name and
-             * signature: 1. The name of the method in UTF encoding. 2. The
+             * desc: 1. The name of the method in UTF encoding. 2. The
              * modifiers of the method written as a 32-bit integer. 3. The
              * descriptor of the method in UTF encoding.
              */

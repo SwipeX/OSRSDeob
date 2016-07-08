@@ -59,7 +59,7 @@ final class FieldWriter extends FieldVisitor {
     private final int desc;
 
     /**
-     * The index of the constant pool item that contains the signature of this
+     * The index of the constant pool item that contains the desc of this
      * field.
      */
     private int signature;
@@ -112,7 +112,7 @@ final class FieldWriter extends FieldVisitor {
      * @param desc
      *            the field's descriptor (see {@link Type}).
      * @param signature
-     *            the field's signature. May be <tt>null</tt>.
+     *            the field's desc. May be <tt>null</tt>.
      * @param value
      *            the field's constant value. May be <tt>null</tt>.
      */

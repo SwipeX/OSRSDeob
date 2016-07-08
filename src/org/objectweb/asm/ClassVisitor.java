@@ -94,7 +94,7 @@ public abstract class ClassVisitor {
      *            the internal name of the class (see
      *            {@link Type#getInternalName() getInternalName}).
      * @param signature
-     *            the signature of this class. May be <tt>null</tt> if the class
+     *            the desc of this class. May be <tt>null</tt> if the class
      *            is not a generic one, and does not extend or implement generic
      *            classes or interfaces.
      * @param superName
@@ -170,7 +170,7 @@ public abstract class ClassVisitor {
     }
 
     /**
-     * Visits an annotation on a type in the class signature.
+     * Visits an annotation on a type in the class desc.
      * 
      * @param typeRef
      *            a reference to the annotated type. The sort of this type
@@ -250,7 +250,7 @@ public abstract class ClassVisitor {
      * @param desc
      *            the field's descriptor (see {@link Type Type}).
      * @param signature
-     *            the field's signature. May be <tt>null</tt> if the field's
+     *            the field's desc. May be <tt>null</tt> if the field's
      *            type does not use generic types.
      * @param value
      *            the field's initial value. This parameter, which may be
@@ -288,7 +288,7 @@ public abstract class ClassVisitor {
      * @param desc
      *            the method's descriptor (see {@link Type Type}).
      * @param signature
-     *            the method's signature. May be <tt>null</tt> if the method
+     *            the method's desc. May be <tt>null</tt> if the method
      *            parameters, return type and exceptions do not use generic
      *            types.
      * @param exceptions

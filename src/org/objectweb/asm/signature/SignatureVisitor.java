@@ -32,7 +32,7 @@ package org.objectweb.asm.signature;
 import org.objectweb.asm.Opcodes;
 
 /**
- * A visitor to visit a generic signature. The methods of this interface must be
+ * A visitor to visit a generic desc. The methods of this interface must be
  * called in one of the three following orders (the last one is the only valid
  * order for a {@link SignatureVisitor} that is returned by a method of this
  * interface):
@@ -103,7 +103,7 @@ public abstract class SignatureVisitor {
     /**
      * Visits the class bound of the last visited formal type parameter.
      * 
-     * @return a non null visitor to visit the signature of the class bound.
+     * @return a non null visitor to visit the desc of the class bound.
      */
     public SignatureVisitor visitClassBound() {
         return this;
@@ -112,7 +112,7 @@ public abstract class SignatureVisitor {
     /**
      * Visits an interface bound of the last visited formal type parameter.
      * 
-     * @return a non null visitor to visit the signature of the interface bound.
+     * @return a non null visitor to visit the desc of the interface bound.
      */
     public SignatureVisitor visitInterfaceBound() {
         return this;
@@ -121,7 +121,7 @@ public abstract class SignatureVisitor {
     /**
      * Visits the type of the super class.
      * 
-     * @return a non null visitor to visit the signature of the super class
+     * @return a non null visitor to visit the desc of the super class
      *         type.
      */
     public SignatureVisitor visitSuperclass() {
@@ -131,7 +131,7 @@ public abstract class SignatureVisitor {
     /**
      * Visits the type of an interface implemented by the class.
      * 
-     * @return a non null visitor to visit the signature of the interface type.
+     * @return a non null visitor to visit the desc of the interface type.
      */
     public SignatureVisitor visitInterface() {
         return this;
@@ -140,7 +140,7 @@ public abstract class SignatureVisitor {
     /**
      * Visits the type of a method parameter.
      * 
-     * @return a non null visitor to visit the signature of the parameter type.
+     * @return a non null visitor to visit the desc of the parameter type.
      */
     public SignatureVisitor visitParameterType() {
         return this;
@@ -149,7 +149,7 @@ public abstract class SignatureVisitor {
     /**
      * Visits the return type of the method.
      * 
-     * @return a non null visitor to visit the signature of the return type.
+     * @return a non null visitor to visit the desc of the return type.
      */
     public SignatureVisitor visitReturnType() {
         return this;
@@ -158,14 +158,14 @@ public abstract class SignatureVisitor {
     /**
      * Visits the type of a method exception.
      * 
-     * @return a non null visitor to visit the signature of the exception type.
+     * @return a non null visitor to visit the desc of the exception type.
      */
     public SignatureVisitor visitExceptionType() {
         return this;
     }
 
     /**
-     * Visits a signature corresponding to a primitive type.
+     * Visits a desc corresponding to a primitive type.
      * 
      * @param descriptor
      *            the descriptor of the primitive type, or 'V' for <tt>void</tt>
@@ -175,7 +175,7 @@ public abstract class SignatureVisitor {
     }
 
     /**
-     * Visits a signature corresponding to a type variable.
+     * Visits a desc corresponding to a type variable.
      * 
      * @param name
      *            the name of the type variable.
@@ -184,9 +184,9 @@ public abstract class SignatureVisitor {
     }
 
     /**
-     * Visits a signature corresponding to an array type.
+     * Visits a desc corresponding to an array type.
      * 
-     * @return a non null visitor to visit the signature of the array element
+     * @return a non null visitor to visit the desc of the array element
      *         type.
      */
     public SignatureVisitor visitArrayType() {
@@ -194,7 +194,7 @@ public abstract class SignatureVisitor {
     }
 
     /**
-     * Starts the visit of a signature corresponding to a class or interface
+     * Starts the visit of a desc corresponding to a class or interface
      * type.
      * 
      * @param name
@@ -224,14 +224,14 @@ public abstract class SignatureVisitor {
      * 
      * @param wildcard
      *            '+', '-' or '='.
-     * @return a non null visitor to visit the signature of the type argument.
+     * @return a non null visitor to visit the desc of the type argument.
      */
     public SignatureVisitor visitTypeArgument(char wildcard) {
         return this;
     }
 
     /**
-     * Ends the visit of a signature corresponding to a class or interface type.
+     * Ends the visit of a desc corresponding to a class or interface type.
      */
     public void visitEnd() {
     }

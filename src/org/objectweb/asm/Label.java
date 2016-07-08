@@ -184,7 +184,7 @@ public class Label {
      * frame", and which is <i>unknown</i> during this step. The second step, in
      * {@link MethodWriter#visitMaxs}, is a fix point algorithm that computes
      * information about the input frame of each basic block, from the input
-     * state of the first basic block (known from the method signature), and by
+     * state of the first basic block (known from the method desc), and by
      * the using the previously computed relative output frames.
      * 
      * The algorithm used to compute the maximum stack size only computes the

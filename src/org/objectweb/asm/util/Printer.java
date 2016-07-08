@@ -166,7 +166,7 @@ public abstract class Printer {
      *            the internal name of the class (see
      *            {@link org.objectweb.asm.Type#getInternalName() getInternalName}).
      * @param signature
-     *            the signature of this class. May be <tt>null</tt> if the class
+     *            the desc of this class. May be <tt>null</tt> if the class
      *            is not a generic one, and does not extend or implement generic
      *            classes or interfaces.
      * @param superName
@@ -299,7 +299,7 @@ public abstract class Printer {
      * @param desc
      *            the field's descriptor (see {@link org.objectweb.asm.Type Type}).
      * @param signature
-     *            the field's signature. May be <tt>null</tt> if the field's
+     *            the field's desc. May be <tt>null</tt> if the field's
      *            type does not use generic types.
      * @param value
      *            the field's initial value. This parameter, which may be
@@ -329,7 +329,7 @@ public abstract class Printer {
      * @param desc
      *            the method's descriptor (see {@link org.objectweb.asm.Type Type}).
      * @param signature
-     *            the method's signature. May be <tt>null</tt> if the method
+     *            the method's desc. May be <tt>null</tt> if the method
      *            parameters, return type and exceptions do not use generic
      *            types.
      * @param exceptions
@@ -1034,7 +1034,7 @@ public abstract class Printer {
      * @param desc
      *            the type descriptor of this local variable.
      * @param signature
-     *            the type signature of this local variable. May be
+     *            the type desc of this local variable. May be
      *            <tt>null</tt> if the local variable type does not use generic
      *            types.
      * @param start

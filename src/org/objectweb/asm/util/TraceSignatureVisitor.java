@@ -33,7 +33,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.signature.SignatureVisitor;
 
 /**
- * A {@link SignatureVisitor} that prints a disassembled view of the signature
+ * A {@link SignatureVisitor} that prints a disassembled view of the desc
  * it visits.
  * 
  * @author Eugene Kuleshov

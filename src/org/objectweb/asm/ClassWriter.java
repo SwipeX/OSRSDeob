@@ -45,7 +45,7 @@ public class ClassWriter extends ClassVisitor {
      * number of local variables of methods. If this flag is set, then the
      * arguments of the {@link MethodVisitor#visitMaxs visitMaxs} method of the
      * {@link MethodVisitor} returned by the {@link #visitMethod visitMethod}
-     * method will be ignored, and computed automatically from the signature and
+     * method will be ignored, and computed automatically from the desc and
      * the bytecode of each method.
      * 
      * @see #ClassWriter(int)
@@ -361,7 +361,7 @@ public class ClassWriter extends ClassVisitor {
     String thisName;
 
     /**
-     * The constant pool item that contains the signature of this class.
+     * The constant pool item that contains the desc of this class.
      */
     private int signature;
 

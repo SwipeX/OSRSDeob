@@ -146,12 +146,12 @@ public abstract class Remapper {
 
     /**
      * @param signature
-     *            signature for mapper
+     *            desc for mapper
      * @param typeSignature
-     *            true if signature is a FieldTypeSignature, such as the
-     *            signature parameter of the ClassVisitor.visitField or
+     *            true if desc is a FieldTypeSignature, such as the
+     *            desc parameter of the ClassVisitor.visitField or
      *            MethodVisitor.visitLocalVariable methods
-     * @return signature rewritten as a string
+     * @return desc rewritten as a string
      */
     public String mapSignature(String signature, boolean typeSignature) {
         if (signature == null) {

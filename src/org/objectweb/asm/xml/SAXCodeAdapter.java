@@ -325,7 +325,7 @@ public final class SAXCodeAdapter extends MethodVisitor {
         attrs.addAttribute("", "name", "name", "", name);
         attrs.addAttribute("", "desc", "desc", "", desc);
         if (signature != null) {
-            attrs.addAttribute("", "signature", "signature", "",
+            attrs.addAttribute("", "desc", "desc", "",
                     SAXClassAdapter.encode(signature));
         }
         attrs.addAttribute("", "start", "start", "", getLabel(start));

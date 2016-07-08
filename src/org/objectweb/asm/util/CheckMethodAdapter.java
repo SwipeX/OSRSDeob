@@ -61,7 +61,7 @@ import org.objectweb.asm.tree.analysis.BasicVerifier;
  * visit method. This adapter can also perform some basic data flow checks (more
  * precisely those that can be performed without the full class hierarchy - see
  * {@link org.objectweb.asm.tree.analysis.BasicVerifier}). For instance in a
- * method whose signature is <tt>void m ()</tt>, the invalid instruction
+ * method whose desc is <tt>void m ()</tt>, the invalid instruction
  * IRETURN, or the invalid sequence IADD L2I will be detected if the data flow
  * checks are enabled. These checks are enabled by using the
  * {@link #CheckMethodAdapter(int,String,String,MethodVisitor,Map)} constructor.
@@ -427,7 +427,7 @@ public class CheckMethodAdapter extends MethodVisitor {
     /**
      * Constructs a new {@link CheckMethodAdapter} object. This method adapter
      * will perform basic data flow checks. For instance in a method whose
-     * signature is <tt>void m ()</tt>, the invalid instruction IRETURN, or the
+     * desc is <tt>void m ()</tt>, the invalid instruction IRETURN, or the
      * invalid sequence IADD L2I will be detected.
      * 
      * @param access

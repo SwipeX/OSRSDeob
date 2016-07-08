@@ -918,7 +918,7 @@ public class ClassReader {
          * if the returned MethodVisitor is in fact a MethodWriter, it means
          * there is no method adapter between the reader and the writer. If, in
          * addition, the writer's constant pool was copied from this reader
-         * (mw.cw.cr == this), and the signature and exceptions of the method
+         * (mw.cw.cr == this), and the desc and exceptions of the method
          * have not been changed, then it is possible to skip all visit events
          * and just copy the original code of the method to the writer (the
          * access, name and descriptor can have been changed, this is not
@@ -1502,7 +1502,7 @@ public class ClassReader {
                 u = varTypeTable + 2;
                 typeTable = new int[readUnsignedShort(varTypeTable) * 3];
                 for (int i = typeTable.length; i > 0;) {
-                    typeTable[--i] = u + 6; // signature
+                    typeTable[--i] = u + 6; // desc
                     typeTable[--i] = readUnsignedShort(u + 8); // index
                     typeTable[--i] = readUnsignedShort(u); // start
                     u += 10;

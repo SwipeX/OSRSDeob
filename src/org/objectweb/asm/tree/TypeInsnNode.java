@@ -80,7 +80,7 @@ public class TypeInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor mv) {
-        mv.visitTypeInsn(opcode, desc);
+        mv.visitTypeInsn(this);
         acceptAnnotations(mv);
     }
 

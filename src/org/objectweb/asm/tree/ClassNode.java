@@ -41,7 +41,6 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.TypePath;
 import pw.tdekk.Application;
-import pw.tdekk.deob.BasicBlock;
 
 /**
  * A node that represents a class.

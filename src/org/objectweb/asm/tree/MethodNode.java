@@ -42,7 +42,6 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
-import pw.tdekk.deob.BasicBlock;
 
 /**
  * A node that represents a method.
@@ -214,7 +213,6 @@ public class MethodNode extends MethodVisitor {
      */
     private boolean visited;
 
-    public BasicBlock[] blocks;
 
     /**
      * Constructs an uninitialized {@link MethodNode}. <i>Subclasses must not
@@ -237,7 +235,6 @@ public class MethodNode extends MethodVisitor {
      *            of {@link Opcodes#ASM4} or {@link Opcodes#ASM5}.
      */
     public MethodNode(final int api) {
-        super(api);
         this.instructions = new InsnList();
     }
 
@@ -282,7 +279,6 @@ public class MethodNode extends MethodVisitor {
      */
     public MethodNode(final int api, final int access, final String name,
                       final String desc, final String signature, final String[] exceptions) {
-        super(api);
         this.access = access;
         this.name = name;
         this.desc = desc;
@@ -310,11 +306,11 @@ public class MethodNode extends MethodVisitor {
     // ------------------------------------------------------------------------
 
     @Override
-    public void visitParameter(String name, int access) {
+    public void visitParameter(ParameterNode node) {
         if (parameters == null) {
-            parameters = new ArrayList<ParameterNode>(5);
+            parameters = new ArrayList<>(5);
         }
-        parameters.add(new ParameterNode(name, access));
+        parameters.add(node);
     }
 
     @Override
@@ -330,9 +326,7 @@ public class MethodNode extends MethodVisitor {
     }
 
     @Override
-    public AnnotationVisitor visitAnnotation(final String desc,
-                                             final boolean visible) {
-        AnnotationNode an = new AnnotationNode(desc);
+    public AnnotationVisitor visitAnnotation(AnnotationNode an, boolean visible) {
         if (visible) {
             if (visibleAnnotations == null) {
                 visibleAnnotations = new ArrayList<AnnotationNode>(1);
@@ -348,9 +342,7 @@ public class MethodNode extends MethodVisitor {
     }
 
     @Override
-    public AnnotationVisitor visitTypeAnnotation(int typeRef,
-                                                 TypePath typePath, String desc, boolean visible) {
-        TypeAnnotationNode an = new TypeAnnotationNode(typeRef, typePath, desc);
+    public AnnotationVisitor visitTypeAnnotation(TypeAnnotationNode an, boolean visible) {
         if (visible) {
             if (visibleTypeAnnotations == null) {
                 visibleTypeAnnotations = new ArrayList<TypeAnnotationNode>(1);
@@ -397,7 +389,7 @@ public class MethodNode extends MethodVisitor {
     @Override
     public void visitAttribute(final Attribute attr) {
         if (attrs == null) {
-            attrs = new ArrayList<Attribute>(1);
+            attrs = new ArrayList<>(1);
         }
         attrs.add(attr);
     }
@@ -407,131 +399,116 @@ public class MethodNode extends MethodVisitor {
     }
 
     @Override
-    public void visitFrame(final int type, final int nLocal,
-                           final Object[] local, final int nStack, final Object[] stack) {
-        instructions.add(new FrameNode(type, nLocal, local == null ? null
-                : getLabelNodes(local), nStack, stack == null ? null
-                : getLabelNodes(stack)));
+    public void visitFrame(FrameNode frame) {
+        int nLocal = frame.local != null ? frame.local.size() : 0;
+        int nStack = frame.stack != null ? frame.stack.size() : 0;
+        instructions.add(new FrameNode(frame.type, nLocal,
+                frame.local != null ? getLabelNodes(frame.local.toArray()) : null, nStack,
+                frame.stack != null ? getLabelNodes(frame.stack.toArray()) : null));
     }
 
     @Override
-    public void visitInsn(final int op) {
-        instructions.add(new InsnNode(op));
+    public void visitInsn(InsnNode in) {
+        instructions.add(in);
     }
 
     @Override
-    public void visitIntInsn(final int opcode, final int operand) {
-        instructions.add(new IntInsnNode(opcode, operand));
+    public void visitIntInsn(IntInsnNode iin) {
+        instructions.add(iin);
     }
 
     @Override
-    public void visitVarInsn(final int opcode, final int var) {
-        instructions.add(new VarInsnNode(opcode, var));
+    public void visitVarInsn(VarInsnNode vin) {
+        instructions.add(vin);
     }
 
     @Override
-    public void visitTypeInsn(final int opcode, final String type) {
-        instructions.add(new TypeInsnNode(opcode, type));
+    public void visitTypeInsn(TypeInsnNode tin) {
+        instructions.add(tin);
     }
 
     @Override
-    public void visitFieldInsn(final int opcode, final String owner,
-                               final String name, final String desc) {
-        instructions.add(new FieldInsnNode(opcode, owner, name, desc));
-    }
-
-    @Deprecated
-    @Override
-    public void visitMethodInsn(int opcode, String owner, String name,
-                                String desc) {
-        if (api >= Opcodes.ASM5) {
-            super.visitMethodInsn(opcode, owner, name, desc);
-            return;
-        }
-        instructions.add(new MethodInsnNode(opcode, owner, name, desc));
+    public void visitFieldInsn(FieldInsnNode fin) {
+        instructions.add(fin);
     }
 
     @Override
-    public void visitMethodInsn(int opcode, String owner, String name,
-                                String desc, boolean itf) {
-        if (api < Opcodes.ASM5) {
-            super.visitMethodInsn(opcode, owner, name, desc, itf);
-            return;
-        }
-        instructions.add(new MethodInsnNode(opcode, owner, name, desc, itf));
+    public void visitMethodInsn(MethodInsnNode min) {
+        instructions.add(min);
     }
 
     @Override
-    public void visitInvokeDynamicInsn(String name, String desc, Handle bsm,
-                                       Object... bsmArgs) {
-        instructions.add(new InvokeDynamicInsnNode(name, desc, bsm, bsmArgs));
+    public void visitInvokeDynamicInsn(InvokeDynamicInsnNode idin) {
+        instructions.add(idin);
     }
 
     @Override
-    public void visitJumpInsn(final int opcode, final Label label) {
-        LabelNode labelNode = getLabelNode(label);
-        JumpInsnNode jump = new JumpInsnNode(opcode, labelNode);
-        jump.target = instructions.indexOf(labelNode);
-        instructions.add(jump);
+    public void visitJumpInsn(JumpInsnNode jin) {
+        instructions.add(new JumpInsnNode(jin.opcode, getLabelNode(jin.label.getLabel())));
     }
 
     @Override
     public void visitLabel(final Label label) {
-        LabelNode node = getLabelNode(label);
-        instructions.add(node);
-        label.position = instructions.indexOf(node);
+        instructions.add(getLabelNode(label));
     }
 
     @Override
-    public void visitLdcInsn(final Object cst) {
-        instructions.add(new LdcInsnNode(cst));
+    public void visitLdcInsn(LdcInsnNode ldc) {
+        instructions.add(ldc);
     }
 
     @Override
-    public void visitIincInsn(final int var, final int increment) {
-        instructions.add(new IincInsnNode(var, increment));
+    public void visitIincInsn(IincInsnNode iin) {
+        instructions.add(iin);
     }
 
     @Override
-    public void visitTableSwitchInsn(final int min, final int max,
-                                     final Label dflt, final Label... labels) {
-        instructions.add(new TableSwitchInsnNode(min, max, getLabelNode(dflt),
+    public void visitTableSwitchInsn(TableSwitchInsnNode tsin) {
+        Label[] labels = new Label[tsin.labels.size()];
+        for (int i = 0; i < labels.length; i++) {
+            labels[i] = tsin.labels.get(i).getLabel();
+        }
+        instructions.add(new TableSwitchInsnNode(tsin.min, tsin.max, getLabelNode(tsin.dflt.getLabel()),
                 getLabelNodes(labels)));
     }
 
     @Override
-    public void visitLookupSwitchInsn(final Label dflt, final int[] keys,
-                                      final Label[] labels) {
-        instructions.add(new LookupSwitchInsnNode(getLabelNode(dflt), keys,
+    public void visitLookupSwitchInsn(LookupSwitchInsnNode lsin) {
+        int[] keys = new int[lsin.keys.size()];
+        for (int i = 0; i < keys.length; i++) {
+            keys[i] = lsin.keys.get(i);
+        }
+        Label[] labels = new Label[lsin.labels.size()];
+        for (int i = 0; i < labels.length; i++) {
+            labels[i] = lsin.labels.get(i).getLabel();
+        }
+        instructions.add(new LookupSwitchInsnNode(getLabelNode(lsin.dflt.getLabel()), keys,
                 getLabelNodes(labels)));
     }
 
     @Override
-    public void visitMultiANewArrayInsn(final String desc, final int dims) {
-        instructions.add(new MultiANewArrayInsnNode(desc, dims));
+    public void visitMultiANewArrayInsn(MultiANewArrayInsnNode manain) {
+        instructions.add(manain);
     }
 
     @Override
-    public AnnotationVisitor visitInsnAnnotation(int typeRef,
-                                                 TypePath typePath, String desc, boolean visible) {
+    public AnnotationVisitor visitInsnAnnotation(TypeAnnotationNode tan, boolean visible) {
         // Finds the last real instruction, i.e. the instruction targeted by
         // this annotation.
         AbstractInsnNode insn = instructions.getLast();
-        while (insn.getOpcode() == -1) {
-            insn = insn.getPrevious();
+        while (insn.opcode== -1) {
+            insn = insn.prev;
         }
         // Adds the annotation to this instruction.
-        TypeAnnotationNode an = new TypeAnnotationNode(typeRef, typePath, desc);
+        TypeAnnotationNode an = new TypeAnnotationNode(tan.typeRef, tan.typePath, desc);
         if (visible) {
             if (insn.visibleTypeAnnotations == null) {
-                insn.visibleTypeAnnotations = new ArrayList<TypeAnnotationNode>(
-                        1);
+                insn.visibleTypeAnnotations = new ArrayList<>(1);
             }
             insn.visibleTypeAnnotations.add(an);
         } else {
             if (insn.invisibleTypeAnnotations == null) {
-                insn.invisibleTypeAnnotations = new ArrayList<TypeAnnotationNode>(
-                        1);
+                insn.invisibleTypeAnnotations = new ArrayList<>(1);
             }
             insn.invisibleTypeAnnotations.add(an);
         }
@@ -539,58 +516,58 @@ public class MethodNode extends MethodVisitor {
     }
 
     @Override
-    public void visitTryCatchBlock(final Label start, final Label end,
-                                   final Label handler, final String type) {
-        tryCatchBlocks.add(new TryCatchBlockNode(getLabelNode(start),
-                getLabelNode(end), getLabelNode(handler), type));
+    public void visitTryCatchBlock(TryCatchBlockNode tcbn) {
+        tryCatchBlocks.add(new TryCatchBlockNode(getLabelNode(tcbn.start.getLabel()),
+                getLabelNode(tcbn.end.getLabel()), getLabelNode(tcbn.handler.getLabel()), tcbn.type));
     }
 
     @Override
-    public AnnotationVisitor visitTryCatchAnnotation(int typeRef,
-                                                     TypePath typePath, String desc, boolean visible) {
-        TryCatchBlockNode tcb = tryCatchBlocks.get((typeRef & 0x00FFFF00) >> 8);
-        TypeAnnotationNode an = new TypeAnnotationNode(typeRef, typePath, desc);
+    public AnnotationVisitor visitTryCatchAnnotation(TypeAnnotationNode tan, boolean visible) {
+        TryCatchBlockNode tcb = tryCatchBlocks.get((tan.typeRef & 0x00FFFF00) >> 8);
         if (visible) {
             if (tcb.visibleTypeAnnotations == null) {
-                tcb.visibleTypeAnnotations = new ArrayList<TypeAnnotationNode>(
-                        1);
+                tcb.visibleTypeAnnotations = new ArrayList<>(1);
             }
-            tcb.visibleTypeAnnotations.add(an);
+            tcb.visibleTypeAnnotations.add(tan);
         } else {
             if (tcb.invisibleTypeAnnotations == null) {
-                tcb.invisibleTypeAnnotations = new ArrayList<TypeAnnotationNode>(
-                        1);
+                tcb.invisibleTypeAnnotations = new ArrayList<>(1);
             }
-            tcb.invisibleTypeAnnotations.add(an);
+            tcb.invisibleTypeAnnotations.add(tan);
         }
-        return an;
+        return tan;
     }
 
     @Override
-    public void visitLocalVariable(final String name, final String desc,
-                                   final String signature, final Label start, final Label end,
-                                   final int index) {
-        localVariables.add(new LocalVariableNode(name, desc, signature,
-                getLabelNode(start), getLabelNode(end), index));
+    public void visitLocalVariable(LocalVariableNode lvn) {
+        localVariables.add(new LocalVariableNode(name, desc, signature, getLabelNode(lvn.start.getLabel()),
+                getLabelNode(lvn.end.getLabel()), lvn.index));
     }
 
     @Override
-    public AnnotationVisitor visitLocalVariableAnnotation(int typeRef,
-                                                          TypePath typePath, Label[] start, Label[] end, int[] index,
-                                                          String desc, boolean visible) {
-        LocalVariableAnnotationNode an = new LocalVariableAnnotationNode(
-                typeRef, typePath, getLabelNodes(start), getLabelNodes(end),
-                index, desc);
+    public AnnotationVisitor visitLocalVariableAnnotation(LocalVariableAnnotationNode lvan, boolean visible) {
+        Label[] startNodes = new Label[lvan.start.size()];
+        for (int i = 0; i < startNodes.length; i++) {
+            startNodes[i] = lvan.start.get(i).getLabel();
+        }
+        Label[] endNodes = new Label[lvan.end.size()];
+        for (int i = 0; i < endNodes.length; i++) {
+            endNodes[i] = lvan.end.get(i).getLabel();
+        }
+        int[] index = new int[lvan.index.size()];
+        for (int i = 0; i < index.length; i++) {
+            index[i] = lvan.index.get(i);
+        }
+        LocalVariableAnnotationNode an = new LocalVariableAnnotationNode(lvan.typeRef, lvan.typePath,
+                getLabelNodes(startNodes), getLabelNodes(endNodes), index, desc);
         if (visible) {
             if (visibleLocalVariableAnnotations == null) {
-                visibleLocalVariableAnnotations = new ArrayList<LocalVariableAnnotationNode>(
-                        1);
+                visibleLocalVariableAnnotations = new ArrayList<>(1);
             }
             visibleLocalVariableAnnotations.add(an);
         } else {
             if (invisibleLocalVariableAnnotations == null) {
-                invisibleLocalVariableAnnotations = new ArrayList<LocalVariableAnnotationNode>(
-                        1);
+                invisibleLocalVariableAnnotations = new ArrayList<>(1);
             }
             invisibleLocalVariableAnnotations.add(an);
         }
@@ -598,8 +575,8 @@ public class MethodNode extends MethodVisitor {
     }
 
     @Override
-    public void visitLineNumber(final int line, final Label start) {
-        instructions.add(new LineNumberNode(line, getLabelNode(start)));
+    public void visitLineNumber(LineNumberNode lnn) {
+        instructions.add(new LineNumberNode(lnn.line, getLabelNode(lnn.start.getLabel())));
     }
 
     @Override
@@ -608,13 +585,8 @@ public class MethodNode extends MethodVisitor {
         this.maxLocals = maxLocals;
     }
 
-    public void visitBlock(BasicBlock block){
-
-    }
-
     @Override
     public void visitEnd() {
-        blocks = BasicBlock.getBlocks(this);
     }
 
     /**
@@ -742,7 +714,7 @@ public class MethodNode extends MethodVisitor {
         n = parameters == null ? 0 : parameters.size();
         for (i = 0; i < n; i++) {
             ParameterNode parameter = parameters.get(i);
-            mv.visitParameter(parameter.name, parameter.access);
+            mv.visitParameter(new ParameterNode(parameter.name, parameter.access));
         }
         // visits the method attributes
         if (annotationDefault != null) {
@@ -755,24 +727,24 @@ public class MethodNode extends MethodVisitor {
         n = visibleAnnotations == null ? 0 : visibleAnnotations.size();
         for (i = 0; i < n; ++i) {
             AnnotationNode an = visibleAnnotations.get(i);
-            an.accept(mv.visitAnnotation(an.desc, true));
+            an.accept(mv.visitAnnotation(new AnnotationNode(an.desc),true));
         }
         n = invisibleAnnotations == null ? 0 : invisibleAnnotations.size();
         for (i = 0; i < n; ++i) {
             AnnotationNode an = invisibleAnnotations.get(i);
-            an.accept(mv.visitAnnotation(an.desc, false));
+            an.accept(mv.visitAnnotation(new AnnotationNode(an.desc), false));
         }
         n = visibleTypeAnnotations == null ? 0 : visibleTypeAnnotations.size();
         for (i = 0; i < n; ++i) {
             TypeAnnotationNode an = visibleTypeAnnotations.get(i);
-            an.accept(mv.visitTypeAnnotation(an.typeRef, an.typePath, an.desc,
+            an.accept(mv.visitTypeAnnotation(new TypeAnnotationNode(an.typeRef, an.typePath, an.desc),
                     true));
         }
         n = invisibleTypeAnnotations == null ? 0 : invisibleTypeAnnotations
                 .size();
         for (i = 0; i < n; ++i) {
             TypeAnnotationNode an = invisibleTypeAnnotations.get(i);
-            an.accept(mv.visitTypeAnnotation(an.typeRef, an.typePath, an.desc,
+            an.accept(mv.visitTypeAnnotation(new TypeAnnotationNode(an.typeRef, an.typePath, an.desc),
                     false));
         }
         n = visibleParameterAnnotations == null ? 0
@@ -838,6 +810,5 @@ public class MethodNode extends MethodVisitor {
             visited = true;
         }
         mv.visitEnd();
-        Arrays.stream(blocks).forEach(b->mv.visitBlock(b));
     }
 }

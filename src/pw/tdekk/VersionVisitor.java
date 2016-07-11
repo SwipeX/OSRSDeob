@@ -6,23 +6,22 @@ package pw.tdekk;
 
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.IntInsnNode;
+import org.objectweb.asm.tree.VarInsnNode;
 
 public class VersionVisitor extends MethodVisitor {
     private int state = 0;
     private int version = -1;
 
-    VersionVisitor() {
-        super(Opcodes.ASM5);
-    }
 
     @Override
-    public void visitIntInsn(int opcode, int operand) {
+    public void visitIntInsn(IntInsnNode var) {
         if (state == 2) {
-            version = operand;
+            version = var.operand;
             ++state;
         }
 
-        if (operand == 765 || operand == 503) {
+        if (var.operand == 765 || var.operand == 503) {
             ++state;
         }
     }

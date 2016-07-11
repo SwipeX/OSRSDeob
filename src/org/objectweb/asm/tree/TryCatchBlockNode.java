@@ -133,21 +133,18 @@ public class TryCatchBlockNode {
      *            a method visitor.
      */
     public void accept(final MethodVisitor mv) {
-        mv.visitTryCatchBlock(start.getLabel(), end.getLabel(),
-                handler == null ? null : handler.getLabel(), type);
+        mv.visitTryCatchBlock(this);
         int n = visibleTypeAnnotations == null ? 0 : visibleTypeAnnotations
                 .size();
         for (int i = 0; i < n; ++i) {
             TypeAnnotationNode an = visibleTypeAnnotations.get(i);
-            an.accept(mv.visitTryCatchAnnotation(an.typeRef, an.typePath,
-                    an.desc, true));
+            an.accept(mv.visitTryCatchAnnotation(an, true));
         }
         n = invisibleTypeAnnotations == null ? 0 : invisibleTypeAnnotations
                 .size();
         for (int i = 0; i < n; ++i) {
             TypeAnnotationNode an = invisibleTypeAnnotations.get(i);
-            an.accept(mv.visitTryCatchAnnotation(an.typeRef, an.typePath,
-                    an.desc, false));
+            an.accept(mv.visitTryCatchAnnotation(an, false));
         }
     }
 }

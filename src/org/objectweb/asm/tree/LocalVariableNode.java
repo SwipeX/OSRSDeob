@@ -106,7 +106,6 @@ public class LocalVariableNode {
      *            a method visitor.
      */
     public void accept(final MethodVisitor mv) {
-        mv.visitLocalVariable(name, desc, signature, start.getLabel(),
-                end.getLabel(), index);
+        mv.visitLocalVariable(this);
     }
 }

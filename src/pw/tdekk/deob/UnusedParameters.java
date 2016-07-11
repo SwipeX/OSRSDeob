@@ -26,12 +26,11 @@ public class UnusedParameters implements Mutator {
                 int offset = (mn.access & Opcodes.ACC_STATIC) != 0 ? 0 : 1;
                 Type[] types = Type.getArgumentTypes(mn.desc);
                 List<Integer> used = new ArrayList<>();
-                mn.accept(new MethodVisitor(Opcodes.ASM5) {
+                mn.accept(new MethodVisitor() {
                     @Override
-                    public void visitVarInsn(int opcode, int var) {
-                        int index = var - offset;
+                    public void visitVarInsn(VarInsnNode var) {
+                        int index = var.var - offset;
                         used.add(index);
-                        super.visitVarInsn(opcode, var);
                     }
                 });
                 if (used.size() == 0) continue;

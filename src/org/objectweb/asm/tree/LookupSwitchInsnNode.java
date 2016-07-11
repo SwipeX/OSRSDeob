@@ -104,7 +104,7 @@ public class LookupSwitchInsnNode extends AbstractInsnNode {
         for (int i = 0; i < labels.length; ++i) {
             labels[i] = this.labels.get(i).getLabel();
         }
-        mv.visitLookupSwitchInsn(dflt.getLabel(), keys, labels);
+        mv.visitLookupSwitchInsn(this);
         acceptAnnotations(mv);
     }
 

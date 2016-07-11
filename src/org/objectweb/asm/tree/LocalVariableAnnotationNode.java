@@ -124,7 +124,7 @@ public class LocalVariableAnnotationNode extends TypeAnnotationNode {
     public LocalVariableAnnotationNode(int api, int typeRef, TypePath typePath,
             LabelNode[] start, LabelNode[] end, int[] index, String desc) {
         super(api, typeRef, typePath, desc);
-        this.start = new ArrayList<LabelNode>(start.length);
+        this.start = new ArrayList<>(start.length);
         this.start.addAll(Arrays.asList(start));
         this.end = new ArrayList<LabelNode>(end.length);
         this.end.addAll(Arrays.asList(end));
@@ -151,7 +151,6 @@ public class LocalVariableAnnotationNode extends TypeAnnotationNode {
             end[i] = this.end.get(i).getLabel();
             index[i] = this.index.get(i);
         }
-        accept(mv.visitLocalVariableAnnotation(typeRef, typePath, start, end,
-                index, desc, true));
+        accept(mv.visitLocalVariableAnnotation(this, true));
     }
 }

@@ -3,9 +3,7 @@ package pw.tdekk.deob;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 import pw.tdekk.Application;
 
 import java.util.ArrayList;
@@ -44,7 +42,6 @@ public class UnusedMembers implements Mutator {
         });
         toRemove.forEach(m -> m.owner.methods.remove(m));
         fields.forEach(f -> f.owner.fields.remove(f));
-        System.out.println(usedMethods.size()+ "methods");
         System.out.println(String.format("Removed %s methods and %s fields in %s ms", removedCount, removedFields, (System.currentTimeMillis() - startTime)));
     }
 
@@ -60,42 +57,42 @@ public class UnusedMembers implements Mutator {
                     visit(sub);
             });
         }
-        mn.accept(new MethodVisitor(Opcodes.ASM5) {
+        mn.accept(new MethodVisitor() {
             @Override
-            public void visitFieldInsn(int opcode, String owner, String name, String desc) {
-                Handle handle = new Handle(0, owner, name, desc, false);
+            public void visitFieldInsn(FieldInsnNode fin) {
+                Handle handle = new Handle(0, fin.owner, fin.name, fin.desc, false);
                 if (!usedFields.contains(handle)) {
                     usedFields.add(handle);
-                    ClassNode node = Application.getClasses().get(owner);
+                    ClassNode node = Application.getClasses().get(fin.owner);
                     if (node != null) {
                         String superName = node.superName;
                         if (Application.getClasses().containsKey(superName)) {
                             ClassNode superClass = Application.getClasses().get(superName);
-                            if (superClass.getField(name, desc) != null)
-                                usedFields.add(new Handle(0, superName, name, desc, false));
+                            if (superClass.getField(fin.name, fin.desc) != null)
+                                usedFields.add(new Handle(0, superName, fin.name, fin.desc, false));
                         }
                     }
-                    getSubClasses(owner).forEach(sub -> usedFields.add(new Handle(0, sub.name, name, desc, false)));
+                    getSubClasses(fin.owner).forEach(sub -> usedFields.add(new Handle(0, sub.name, fin.name, fin.desc, false)));
                 }
             }
 
             @Override
-            public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
-                if (Application.getClasses().containsKey(owner)) {
-                    ClassNode node = Application.getClasses().get(owner);
-                    MethodNode method = node.getMethod(name, desc);
+            public void visitMethodInsn(MethodInsnNode mn) {
+                if (Application.getClasses().containsKey(mn.owner)) {
+                    ClassNode node = Application.getClasses().get(mn.owner);
+                    MethodNode method = node.getMethod(mn.name, mn.desc);
                     if (method != null) {
                         String superName = node.superName;
                         if (Application.getClasses().containsKey(superName)) {
                             ClassNode superClass = Application.getClasses().get(superName);
-                            MethodNode superMethod = superClass.getMethod(name, desc);
+                            MethodNode superMethod = superClass.getMethod(mn.name, mn.desc);
                             if (superMethod != null) {
                                 visit(superMethod);
                             }
                         }
                         getSubClasses(node.name).forEach(
                                 sub -> {
-                                    MethodNode superMethod = sub.getMethod(name, desc);
+                                    MethodNode superMethod = sub.getMethod(mn.name, mn.desc);
                                     if (superMethod != null) {
                                         visit(superMethod);
                                     }

@@ -74,7 +74,7 @@ public class LineNumberNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor mv) {
-        mv.visitLineNumber(line, start.getLabel());
+        mv.visitLineNumber(this);
     }
 
     @Override

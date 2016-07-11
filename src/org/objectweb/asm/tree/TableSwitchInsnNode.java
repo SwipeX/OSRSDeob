@@ -102,7 +102,7 @@ public class TableSwitchInsnNode extends AbstractInsnNode {
         for (int i = 0; i < labels.length; ++i) {
             labels[i] = this.labels.get(i).getLabel();
         }
-        mv.visitTableSwitchInsn(min, max, dflt.getLabel(), labels);
+        mv.visitTableSwitchInsn(this);
         acceptAnnotations(mv);
     }
 

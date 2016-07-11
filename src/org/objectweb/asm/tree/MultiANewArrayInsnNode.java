@@ -72,7 +72,7 @@ public class MultiANewArrayInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor mv) {
-        mv.visitMultiANewArrayInsn(desc, dims);
+        mv.visitMultiANewArrayInsn(this);
         acceptAnnotations(mv);
     }
 

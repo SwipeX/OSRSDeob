@@ -236,15 +236,13 @@ public abstract class AbstractInsnNode {
                 .size();
         for (int i = 0; i < n; ++i) {
             TypeAnnotationNode an = visibleTypeAnnotations.get(i);
-            an.accept(mv.visitInsnAnnotation(an.typeRef, an.typePath, an.desc,
-                    true));
+            an.accept(mv.visitInsnAnnotation(an, true));
         }
         n = invisibleTypeAnnotations == null ? 0 : invisibleTypeAnnotations
                 .size();
         for (int i = 0; i < n; ++i) {
             TypeAnnotationNode an = invisibleTypeAnnotations.get(i);
-            an.accept(mv.visitInsnAnnotation(an.typeRef, an.typePath, an.desc,
-                    false));
+            an.accept(mv.visitInsnAnnotation(an, false));
         }
     }
 

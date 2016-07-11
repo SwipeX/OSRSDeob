@@ -90,7 +90,7 @@ public class JumpInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor mv) {
-        mv.visitJumpInsn(opcode, label.getLabel());
+        mv.visitJumpInsn(this);
         acceptAnnotations(mv);
     }
 

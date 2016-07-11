@@ -71,6 +71,6 @@ public class ParameterNode {
      *            a method visitor.
      */
     public void accept(final MethodVisitor mv) {
-        mv.visitParameter(name, access);
+        mv.visitParameter(this);
     }
 }

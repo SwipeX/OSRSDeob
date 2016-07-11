@@ -98,8 +98,7 @@ public class FieldInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor mv) {
-        mv.visitFieldInsn(opcode, owner, name, desc);
-        acceptAnnotations(mv);
+        mv.visitFieldInsn(new FieldInsnNode(opcode, owner, name, desc));        acceptAnnotations(mv);
     }
 
     @Override

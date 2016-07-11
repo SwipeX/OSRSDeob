@@ -68,6 +68,7 @@ public class LdcInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor mv) {
+        super.accept(mv);
         mv.visitLdcInsn(this);
         acceptAnnotations(mv);
     }

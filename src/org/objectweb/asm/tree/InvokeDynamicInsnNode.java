@@ -90,6 +90,7 @@ public class InvokeDynamicInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor mv) {
+        super.accept(mv);
         mv.visitInvokeDynamicInsn(this);
         acceptAnnotations(mv);
     }

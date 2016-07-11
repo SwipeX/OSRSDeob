@@ -230,6 +230,15 @@ public abstract class MethodVisitor {
     // -------------------------------------------------------------------------
 
     /**
+     * This method will be visited EVERY instruction. Use for pre-processing or general contexts.
+     * @param ain - any instruction
+     */
+    public void visitAbstractInsn(AbstractInsnNode ain){
+        if (mv != null) {
+            mv.visitAbstractInsn(ain);
+        }
+    }
+    /**
      * Visits a zero operand instruction.
      */
     public void visitInsn(InsnNode in) {

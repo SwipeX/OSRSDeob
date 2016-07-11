@@ -407,6 +407,9 @@ public class MethodNode extends MethodVisitor {
                 frame.stack != null ? getLabelNodes(frame.stack.toArray()) : null));
     }
 
+    public void visitAbstractInsn(AbstractInsnNode ain){
+    }
+
     @Override
     public void visitInsn(InsnNode in) {
         instructions.add(in);

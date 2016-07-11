@@ -224,7 +224,9 @@ public abstract class AbstractInsnNode {
      *
      * @param cv a code visitor.
      */
-    public abstract void accept(final MethodVisitor cv);
+    public void accept(final MethodVisitor cv){
+        cv.visitAbstractInsn(this);
+    }
 
     /**
      * Makes the given visitor visit the annotations of this instruction.

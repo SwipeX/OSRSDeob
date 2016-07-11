@@ -64,6 +64,7 @@ public class LabelNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor cv) {
+        super.accept(cv);
         cv.visitLabel(getLabel());
     }
 

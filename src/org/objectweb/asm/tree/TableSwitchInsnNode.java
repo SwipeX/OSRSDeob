@@ -98,6 +98,7 @@ public class TableSwitchInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor mv) {
+        super.accept(mv);
         Label[] labels = new Label[this.labels.size()];
         for (int i = 0; i < labels.length; ++i) {
             labels[i] = this.labels.get(i).getLabel();

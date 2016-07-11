@@ -83,6 +83,7 @@ public class VarInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor mv) {
+        super.accept(mv);
         mv.visitVarInsn(this);
         acceptAnnotations(mv);
     }

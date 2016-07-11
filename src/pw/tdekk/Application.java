@@ -5,6 +5,7 @@ import org.objectweb.asm.tree.*;
 import pw.tdekk.deob.Mutator;
 import pw.tdekk.deob.UnusedMembers;
 import pw.tdekk.deob.UnusedParameters;
+import pw.tdekk.deob.cfg.BlockAssembler;
 import pw.tdekk.rs.AbstractIdentifier;
 import pw.tdekk.rs.Node;
 import pw.tdekk.util.Archive;
@@ -42,6 +43,10 @@ public class Application {
             Arrays.stream(identifiers).forEach(i ->{ i.setIdentified(i.Identify()); i.Process();});
             System.out.println("Executed in: " + (System.currentTimeMillis() - startTime));
             Archive.write(new File("test.jar"), classes);
+
+            ClassNode A = classes.get("a");
+            MethodNode f = A.getMethod("f","(I)Z");
+            System.out.println(new BlockAssembler(f).getBlocks().size());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -5,10 +5,15 @@ import org.objectweb.asm.tree.*;
 
 import java.util.ArrayList;
 
+import static org.objectweb.asm.Opcodes.*;
+
 /**
  * Created by TimD on 7/11/2016.
+ * <p>
+ * This class will assemble the blocks for a method using the visitor framework.
+ * </p>
  */
-public class BlockAssembler extends MethodVisitor {
+public class BasicBlockAssembler extends MethodVisitor {
 
     private final MethodNode node;
     private final ArrayList<BasicBlock> blocks = new ArrayList<>();
@@ -18,7 +23,7 @@ public class BlockAssembler extends MethodVisitor {
     /**
      * @param node - the method from which the blocks will be generated.
      */
-    public BlockAssembler(MethodNode node) {
+    public BasicBlockAssembler(MethodNode node) {
         this.node = node;
         buildTargets();
         currentBlock = new BasicBlock(node);
@@ -57,90 +62,75 @@ public class BlockAssembler extends MethodVisitor {
 
             @Override
             public void visitTryCatchBlock(TryCatchBlockNode tcbn) {
-                targets.add(node.instructions.indexOf(tcbn.start));
-                targets.add(node.instructions.indexOf(tcbn.end));
+                //   targets.add(node.instructions.indexOf(tcbn.start));
+                //  targets.add(node.instructions.indexOf(tcbn.end));
                 targets.add(node.instructions.indexOf(tcbn.handler));
             }
         });
     }
 
-    public void visitAbstractInsn(AbstractInsnNode ain){
-        if(targets.contains(node.instructions.indexOf(ain))){
-            blocks.add(currentBlock);
-            currentBlock = new BasicBlock(node);
+    /**
+     * This will visit any instruction before it is formally visited, mostly this just saves code space.
+     *
+     * @param ain - any instruction
+     */
+    public void visitAbstractInsn(AbstractInsnNode ain) {
+        if (targets.contains(node.instructions.indexOf(ain))) {
+            currentBlock.setType(BlockType.TARGET);
+            nextBlock();
+        }
+        if (ain.getOpcode() >= 0) {
+            currentBlock.getInstructions().add(ain);
         }
     }
 
+    /**
+     * This will account for returns, which always end a block.
+     *
+     * @param in - any generic instruction as defined by ASM
+     */
     @Override
     public void visitInsn(InsnNode in) {
-        currentBlock.getInstructions().add(in);
+        switch (in.getOpcode()) {
+            case RETURN:
+            case IRETURN:
+            case ARETURN:
+            case FRETURN:
+            case DRETURN:
+            case LRETURN:
+            case ATHROW: {
+                currentBlock.setType(BlockType.RETURN);
+                nextBlock();
+            }
+        }
     }
 
-    @Override
-    public void visitIntInsn(IntInsnNode iin) {
-        currentBlock.getInstructions().add(iin);
-    }
-
-    @Override
-    public void visitVarInsn(VarInsnNode vin) {
-        currentBlock.getInstructions().add(vin);
-    }
-
-    @Override
-    public void visitTypeInsn(TypeInsnNode tin) {
-        currentBlock.getInstructions().add(tin);
-    }
-
-    @Override
-    public void visitFieldInsn(FieldInsnNode fin) {
-        currentBlock.getInstructions().add(fin);
-    }
-
-    @Override
-    public void visitMethodInsn(MethodInsnNode min) {
-        currentBlock.getInstructions().add(min);
-    }
-
-    @Override
-    public void visitInvokeDynamicInsn(InvokeDynamicInsnNode idin) {
-        currentBlock.getInstructions().add(idin);
-    }
-
+    /**
+     * This will account for all jump instructions - which always end a block
+     *
+     * @param jin - a jump instruction node
+     */
     @Override
     public void visitJumpInsn(JumpInsnNode jin) {
-        currentBlock.getInstructions().add(jin);
-        blocks.add(currentBlock);
-        currentBlock = new BasicBlock(node);
+        nextBlock();
     }
 
-    @Override
-    public void visitLdcInsn(LdcInsnNode ldc) {
-        currentBlock.getInstructions().add(ldc);
-    }
-
-    @Override
-    public void visitIincInsn(IincInsnNode iin) {
-        currentBlock.getInstructions().add(iin);
-    }
-
-    @Override
-    public void visitTableSwitchInsn(TableSwitchInsnNode tsin) {
-        currentBlock.getInstructions().add(tsin);
-    }
-
-    @Override
-    public void visitLookupSwitchInsn(LookupSwitchInsnNode lsin) {
-        currentBlock.getInstructions().add(lsin);
-    }
-
-    @Override
-    public void visitMultiANewArrayInsn(MultiANewArrayInsnNode manain) {
-        currentBlock.getInstructions().add(manain);
-    }
-
+    /**
+     * Visiting this method will conclude the last block, and add it into the list.
+     */
     public void visitEnd() {
         if (currentBlock != null && currentBlock.getInstructions().size() > 0) {
             blocks.add(currentBlock);
+        }
+    }
+
+    /**
+     * As long as the current block is not empty, this will create a fresh block and store the previous one.
+     */
+    private final void nextBlock() {
+        if (currentBlock.getInstructions().size() > 0) {
+            blocks.add(currentBlock);
+            currentBlock = new BasicBlock(node);
         }
     }
 }

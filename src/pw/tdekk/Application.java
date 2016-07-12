@@ -5,7 +5,8 @@ import org.objectweb.asm.tree.*;
 import pw.tdekk.deob.Mutator;
 import pw.tdekk.deob.UnusedMembers;
 import pw.tdekk.deob.UnusedParameters;
-import pw.tdekk.deob.cfg.BlockAssembler;
+import pw.tdekk.deob.cfg.BasicBlockAssembler;
+import pw.tdekk.deob.cfg.ControlFlowGraph;
 import pw.tdekk.rs.AbstractIdentifier;
 import pw.tdekk.rs.Node;
 import pw.tdekk.util.Archive;
@@ -40,13 +41,19 @@ public class Application {
             int version = versionVisitor.getVersion();
             System.out.println("Running on OSRS #" + version);
             Arrays.stream(mutators).forEach(Mutator::mutate);
-            Arrays.stream(identifiers).forEach(i ->{ i.setIdentified(i.Identify()); i.Process();});
+            Arrays.stream(identifiers).forEach(i -> {
+                i.setIdentified(i.Identify());
+                i.Process();
+            });
             System.out.println("Executed in: " + (System.currentTimeMillis() - startTime));
             Archive.write(new File("test.jar"), classes);
 
             ClassNode A = classes.get("a");
-            MethodNode f = A.getMethod("f","(I)Z");
-            System.out.println(new BlockAssembler(f).getBlocks().size());
+            MethodNode f = A.getMethod("f", "(I)Z");
+            // new BasicBlockAssembler(f).getBlocks().forEach(b-> System.out.println(b));
+            ControlFlowGraph cfg = new ControlFlowGraph(f);
+            cfg.generate();
+            System.out.println(cfg);
         } catch (Exception e) {
             e.printStackTrace();
         }

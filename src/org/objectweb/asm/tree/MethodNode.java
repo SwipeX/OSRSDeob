@@ -42,6 +42,9 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.TypePath;
+import pw.tdekk.deob.cfg.BasicBlock;
+import pw.tdekk.deob.cfg.BasicBlockAssembler;
+import pw.tdekk.util.TreeNode;
 
 /**
  * A node that represents a method.
@@ -212,6 +215,8 @@ public class MethodNode extends MethodVisitor {
      * If the accept method has been called on this object.
      */
     private boolean visited;
+
+    public BasicBlock[] blocks;
 
 
     /**
@@ -407,7 +412,7 @@ public class MethodNode extends MethodVisitor {
                 frame.stack != null ? getLabelNodes(frame.stack.toArray()) : null));
     }
 
-    public void visitAbstractInsn(AbstractInsnNode ain){
+    public void visitAbstractInsn(AbstractInsnNode ain) {
     }
 
     @Override
@@ -499,7 +504,7 @@ public class MethodNode extends MethodVisitor {
         // Finds the last real instruction, i.e. the instruction targeted by
         // this annotation.
         AbstractInsnNode insn = instructions.getLast();
-        while (insn.opcode== -1) {
+        while (insn.opcode == -1) {
             insn = insn.prev;
         }
         // Adds the annotation to this instruction.
@@ -590,6 +595,7 @@ public class MethodNode extends MethodVisitor {
 
     @Override
     public void visitEnd() {
+        blocks = new BasicBlockAssembler(this).getBlocks().toArray(new BasicBlock[0]);
     }
 
     /**
@@ -730,7 +736,7 @@ public class MethodNode extends MethodVisitor {
         n = visibleAnnotations == null ? 0 : visibleAnnotations.size();
         for (i = 0; i < n; ++i) {
             AnnotationNode an = visibleAnnotations.get(i);
-            an.accept(mv.visitAnnotation(new AnnotationNode(an.desc),true));
+            an.accept(mv.visitAnnotation(new AnnotationNode(an.desc), true));
         }
         n = invisibleAnnotations == null ? 0 : invisibleAnnotations.size();
         for (i = 0; i < n; ++i) {

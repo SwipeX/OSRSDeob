@@ -41,10 +41,8 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.TypePath;
 import pw.tdekk.deob.cfg.BasicBlock;
 import pw.tdekk.deob.cfg.BasicBlockAssembler;
-import pw.tdekk.util.TreeNode;
 
 /**
  * A node that represents a method.
@@ -178,7 +176,7 @@ public class MethodNode extends MethodVisitor {
     public List<TryCatchBlockNode> tryCatchBlocks;
 
     /**
-     * The maximum stack size of this method.
+     * The maximum stack getSize of this method.
      */
     public int maxStack;
 

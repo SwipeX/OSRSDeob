@@ -199,9 +199,9 @@ final class FieldWriter extends FieldVisitor {
     // ------------------------------------------------------------------------
 
     /**
-     * Returns the size of this field.
+     * Returns the getSize of this field.
      * 
-     * @return the size of this field.
+     * @return the getSize of this field.
      */
     int getSize() {
         int size = 8;

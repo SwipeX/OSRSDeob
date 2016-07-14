@@ -53,9 +53,9 @@ class Edge {
     /**
      * Information about this control flow graph edge. If
      * {@link ClassWriter#COMPUTE_MAXS} is used this field is the (relative)
-     * stack size in the basic block from which this edge originates. This size
-     * is equal to the stack size at the "jump" instruction to which this edge
-     * corresponds, relatively to the stack size at the beginning of the
+     * stack getSize in the basic block from which this edge originates. This getSize
+     * is equal to the stack getSize at the "jump" instruction to which this edge
+     * corresponds, relatively to the stack getSize at the beginning of the
      * originating basic block. If {@link ClassWriter#COMPUTE_FRAMES} is used,
      * this field is the kind of this control flow graph edge (i.e. NORMAL or
      * EXCEPTION).

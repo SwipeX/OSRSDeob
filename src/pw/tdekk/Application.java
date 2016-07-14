@@ -47,10 +47,9 @@ public class Application {
             });
             System.out.println("Executed in: " + (System.currentTimeMillis() - startTime));
             Archive.write(new File("test.jar"), classes);
-
             ClassNode A = classes.get("a");
-            MethodNode f = A.getMethod("f", "(I)Z");
-            // new BasicBlockAssembler(f).getBlocks().forEach(b-> System.out.println(b));
+            MethodNode f = A.methods.get(0);
+//             new BasicBlockAssembler(f).getBlocks().forEach(b-> System.out.println(b));
             ControlFlowGraph cfg = new ControlFlowGraph(f);
             cfg.generate();
             System.out.println(cfg);

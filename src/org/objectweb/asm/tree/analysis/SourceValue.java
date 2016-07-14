@@ -42,7 +42,7 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 public class SourceValue implements Value {
 
     /**
-     * The size of this value.
+     * The getSize of this value.
      */
     public final int size;
 

@@ -147,7 +147,7 @@ public class Attribute {
      *            code attribute, or <tt>null</tt> if this attribute is not a
      *            code attribute.
      * @param maxStack
-     *            the maximum stack size of the method corresponding to this
+     *            the maximum stack getSize of the method corresponding to this
      *            code attribute, or -1 if this attribute is not a code
      *            attribute.
      * @param maxLocals
@@ -180,7 +180,7 @@ public class Attribute {
     }
 
     /**
-     * Returns the size of all the attributes in this attribute list.
+     * Returns the getSize of all the attributes in this attribute list.
      * 
      * @param cw
      *            the class writer to be used to convert the attributes into
@@ -194,15 +194,15 @@ public class Attribute {
      *            these code attributes, or <tt>null</tt> if these attributes
      *            are not code attributes.
      * @param maxStack
-     *            the maximum stack size of the method corresponding to these
+     *            the maximum stack getSize of the method corresponding to these
      *            code attributes, or -1 if these attributes are not code
      *            attributes.
      * @param maxLocals
      *            the maximum number of local variables of the method
      *            corresponding to these code attributes, or -1 if these
      *            attributes are not code attributes.
-     * @return the size of all the attributes in this attribute list. This size
-     *         includes the size of the attribute headers.
+     * @return the getSize of all the attributes in this attribute list. This getSize
+     *         includes the getSize of the attribute headers.
      */
     final int getSize(final ClassWriter cw, final byte[] code, final int len,
             final int maxStack, final int maxLocals) {
@@ -232,7 +232,7 @@ public class Attribute {
      *            these code attributes, or <tt>null</tt> if these attributes
      *            are not code attributes.
      * @param maxStack
-     *            the maximum stack size of the method corresponding to these
+     *            the maximum stack getSize of the method corresponding to these
      *            code attributes, or -1 if these attributes are not code
      *            attributes.
      * @param maxLocals

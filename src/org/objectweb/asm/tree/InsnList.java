@@ -100,7 +100,7 @@ public class InsnList {
      *            the index of the instruction that must be returned.
      * @return the instruction whose index is given.
      * @throws IndexOutOfBoundsException
-     *             if (index &lt; 0 || index &gt;= size()).
+     *             if (index &lt; 0 || index &gt;= getSize()).
      */
     public AbstractInsnNode get(final int index) {
         if (index < 0 || index >= size) {

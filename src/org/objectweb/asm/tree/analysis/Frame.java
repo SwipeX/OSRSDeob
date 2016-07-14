@@ -76,12 +76,12 @@ public class Frame<V extends Value> {
     private int top;
 
     /**
-     * Constructs a new frame with the given size.
+     * Constructs a new frame with the given getSize.
      * 
      * @param nLocals
      *            the maximum number of local variables of the frame.
      * @param nStack
-     *            the maximum stack size of the frame.
+     *            the maximum stack getSize of the frame.
      */
     @SuppressWarnings("unchecked")
     public Frame(final int nLocals, final int nStack) {
@@ -135,9 +135,9 @@ public class Frame<V extends Value> {
     }
 
     /**
-     * Returns the maximum stack size of this frame.
+     * Returns the maximum stack getSize of this frame.
      * 
-     * @return the maximum stack size of this frame.
+     * @return the maximum stack getSize of this frame.
      */
     public int getMaxStackSize() {
         return values.length - locals;
@@ -235,7 +235,7 @@ public class Frame<V extends Value> {
     public void push(final V value) throws IndexOutOfBoundsException {
         if (top + locals >= values.length) {
             throw new IndexOutOfBoundsException(
-                    "Insufficient maximum stack size.");
+                    "Insufficient maximum stack getSize.");
         }
         values[top++ + locals] = value;
     }

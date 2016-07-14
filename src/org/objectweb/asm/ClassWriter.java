@@ -41,7 +41,7 @@ package org.objectweb.asm;
 public class ClassWriter extends ClassVisitor {
 
     /**
-     * Flag to automatically compute the maximum stack size and the maximum
+     * Flag to automatically compute the maximum stack getSize and the maximum
      * number of local variables of methods. If this flag is set, then the
      * arguments of the {@link MethodVisitor#visitMaxs visitMaxs} method of the
      * {@link MethodVisitor} returned by the {@link #visitMethod visitMethod}
@@ -484,7 +484,7 @@ public class ClassWriter extends ClassVisitor {
     MethodWriter lastMethod;
 
     /**
-     * <tt>true</tt> if the maximum stack size and number of local variables
+     * <tt>true</tt> if the maximum stack getSize and number of local variables
      * must be automatically computed.
      */
     private boolean computeMaxs;
@@ -646,7 +646,7 @@ public class ClassWriter extends ClassVisitor {
      *            option flags that can be used to modify the default behavior
      *            of this class. <i>These option flags do not affect methods
      *            that are copied as is in the new class. This means that the
-     *            maximum stack size nor the stack frames will be computed for
+     *            maximum stack getSize nor the stack frames will be computed for
      *            these methods</i>. See {@link #COMPUTE_MAXS},
      *            {@link #COMPUTE_FRAMES}.
      */
@@ -811,7 +811,7 @@ public class ClassWriter extends ClassVisitor {
         if (index > 0xFFFF) {
             throw new RuntimeException("Class file too large!");
         }
-        // computes the real size of the bytecode of this class
+        // computes the real getSize of the bytecode of this class
         int size = 24 + 2 * interfaceCount;
         int nbFields = 0;
         FieldWriter fb = firstField;
@@ -898,7 +898,7 @@ public class ClassWriter extends ClassVisitor {
             size += attrs.getSize(this, null, 0, -1, -1);
         }
         size += pool.length;
-        // allocates a byte vector of this size, in order to avoid unnecessary
+        // allocates a byte vector of this getSize, in order to avoid unnecessary
         // arraycopy operations in the ByteVector.enlarge() method
         ByteVector out = new ByteVector(size);
         out.putInt(0xCAFEBABE).putInt(version);
@@ -1321,8 +1321,8 @@ public class ClassWriter extends ClassVisitor {
                 continue;
             }
 
-            // because the data encode the size of the argument
-            // we don't need to test if these size are equals
+            // because the data encode the getSize of the argument
+            // we don't need to test if these getSize are equals
             int resultPosition = result.intVal;
             for (int p = 0; p < length; p++) {
                 if (data[position + p] != data[resultPosition + p]) {

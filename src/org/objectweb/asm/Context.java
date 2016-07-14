@@ -134,7 +134,7 @@ class Context {
     Object[] local;
 
     /**
-     * The stack size of the latest stack map frame that has been parsed.
+     * The stack getSize of the latest stack map frame that has been parsed.
      */
     int stackCount;
 

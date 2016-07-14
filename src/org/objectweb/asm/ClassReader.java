@@ -1749,8 +1749,8 @@ public class ClassReader {
         int i;
         int n = b[v++] & 0xFF;
         // workaround for a bug in javac (javac compiler generates a parameter
-        // annotation array whose size is equal to the number of parameters in
-        // the Java source file, while it should generate an array whose size is
+        // annotation array whose getSize is equal to the number of parameters in
+        // the Java source file, while it should generate an array whose getSize is
         // equal to the number of parameters in the method descriptor - which
         // includes the synthetic parameters added by the compiler). This work-
         // around supposes that the synthetic parameters are the first ones.

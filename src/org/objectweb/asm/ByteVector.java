@@ -49,7 +49,7 @@ public class ByteVector {
 
     /**
      * Constructs a new {@link ByteVector ByteVector} with a default initial
-     * size.
+     * getSize.
      */
     public ByteVector() {
         data = new byte[64];
@@ -57,10 +57,10 @@ public class ByteVector {
 
     /**
      * Constructs a new {@link ByteVector ByteVector} with the given initial
-     * size.
+     * getSize.
      * 
      * @param initialSize
-     *            the initial size of the byte vector to be constructed.
+     *            the initial getSize of the byte vector to be constructed.
      */
     public ByteVector(final int initialSize) {
         data = new byte[initialSize];

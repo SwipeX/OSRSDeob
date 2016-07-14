@@ -44,7 +44,7 @@ final class Item {
 
     /**
      * Type of this constant pool item. A single class is used to represent all
-     * constant pool item types, in order to minimize the bytecode size of this
+     * constant pool item types, in order to minimize the bytecode getSize of this
      * package. The value of this field is one of {@link ClassWriter#INT},
      * {@link ClassWriter#LONG}, {@link ClassWriter#FLOAT},
      * {@link ClassWriter#DOUBLE}, {@link ClassWriter#UTF8},

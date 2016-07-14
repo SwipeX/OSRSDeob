@@ -225,14 +225,14 @@ final class Frame {
     static final int UNINITIALIZED_THIS = BASE | 6;
 
     /**
-     * The stack size variation corresponding to each JVM instruction. This
-     * stack variation is equal to the size of the values produced by an
-     * instruction, minus the size of the values consumed by this instruction.
+     * The stack getSize variation corresponding to each JVM instruction. This
+     * stack variation is equal to the getSize of the values produced by an
+     * instruction, minus the getSize of the values consumed by this instruction.
      */
     static final int[] SIZE;
 
     /**
-     * Computes the stack size variation corresponding to each JVM instruction.
+     * Computes the stack getSize variation corresponding to each JVM instruction.
      */
     static {
         int i;
@@ -248,7 +248,7 @@ final class Frame {
 
         // code to generate the above string
         //
-        // int NA = 0; // not applicable (unused opcode or variable size opcode)
+        // int NA = 0; // not applicable (unused opcode or variable getSize opcode)
         //
         // b = new int[] {
         // 0, //NOP, // visitInsn
@@ -487,10 +487,10 @@ final class Frame {
     private int[] outputStack;
 
     /**
-     * Relative size of the output stack. The exact semantics of this field
+     * Relative getSize of the output stack. The exact semantics of this field
      * depends on the algorithm that is used.
      * 
-     * When only the maximum stack size is computed, this field is the size of
+     * When only the maximum stack getSize is computed, this field is the getSize of
      * the output stack relatively to the top of the input stack.
      * 
      * When the stack map frames are completely computed, this field is the
@@ -961,7 +961,7 @@ final class Frame {
             set(arg, t1);
             if (arg > 0) {
                 t2 = get(arg - 1);
-                // if t2 is of kind STACK or LOCAL we cannot know its size!
+                // if t2 is of kind STACK or LOCAL we cannot know its getSize!
                 if (t2 == LONG || t2 == DOUBLE) {
                     set(arg - 1, TOP);
                 } else if ((t2 & KIND) != BASE) {
@@ -977,7 +977,7 @@ final class Frame {
             set(arg + 1, TOP);
             if (arg > 0) {
                 t2 = get(arg - 1);
-                // if t2 is of kind STACK or LOCAL we cannot know its size!
+                // if t2 is of kind STACK or LOCAL we cannot know its getSize!
                 if (t2 == LONG || t2 == DOUBLE) {
                     set(arg - 1, TOP);
                 } else if ((t2 & KIND) != BASE) {

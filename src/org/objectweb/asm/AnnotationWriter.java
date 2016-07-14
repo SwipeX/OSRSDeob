@@ -217,7 +217,7 @@ final class AnnotationWriter extends AnnotationVisitor {
         if (named) {
             bv.putShort(cw.newUTF8(name));
         }
-        // write tag, and reserve space for array size
+        // write tag, and reserve space for array getSize
         bv.put12('[', 0);
         return new AnnotationWriter(cw, false, bv, bv, bv.length - 2);
     }
@@ -236,9 +236,9 @@ final class AnnotationWriter extends AnnotationVisitor {
     // ------------------------------------------------------------------------
 
     /**
-     * Returns the size of this annotation writer list.
+     * Returns the getSize of this annotation writer list.
      * 
-     * @return the size of this annotation writer list.
+     * @return the getSize of this annotation writer list.
      */
     int getSize() {
         int size = 0;

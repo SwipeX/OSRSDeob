@@ -37,7 +37,7 @@ package org.objectweb.asm.tree.analysis;
 public interface Value {
 
     /**
-     * Returns the size of this value in words.
+     * Returns the getSize of this value in words.
      * 
      * @return either 1 or 2.
      */

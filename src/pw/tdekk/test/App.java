@@ -37,7 +37,7 @@ public class App {
             applet.setStub(appletStub);
             // Turn the key and start the Applet up
             applet.init();
-            // Set the size, this can also be done by reading the parameters, but I was too lazy to parse the Int's
+            // Set the getSize, this can also be done by reading the parameters, but I was too lazy to parse the Int's
             applet.setSize(765, 503);
             // Using our setter, make it so everything knows the Applet is active
             appletStub.setActive(true);

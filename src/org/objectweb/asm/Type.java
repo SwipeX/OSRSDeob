@@ -172,8 +172,8 @@ public class Type {
 
     /**
      * The offset of the internal name of this Java type in {@link #buf buf} or,
-     * for primitive types, the size, descriptor and getOpcode offsets for this
-     * type (byte 0 contains the size, byte 1 the descriptor, byte 2 the offset
+     * for primitive types, the getSize, descriptor and getOpcode offsets for this
+     * type (byte 0 contains the getSize, byte 1 the descriptor, byte 2 the offset
      * for IALOAD or IASTORE, byte 3 the offset for all other instructions).
      */
     private final int off;
@@ -394,12 +394,12 @@ public class Type {
     }
 
     /**
-     * Computes the size of the arguments and of the return value of a method.
+     * Computes the getSize of the arguments and of the return value of a method.
      * 
      * @param desc
      *            the descriptor of a method.
-     * @return the size of the arguments of the method (plus one for the
-     *         implicit this argument), argSize, and the size of its return
+     * @return the getSize of the arguments of the method (plus one for the
+     *         implicit this argument), argSize, and the getSize of its return
      *         value, retSize, packed into a single int i =
      *         <tt>(argSize &lt;&lt; 2) | retSize</tt> (argSize is therefore equal to
      *         <tt>i &gt;&gt; 2</tt>, and retSize to <tt>i &amp; 0x03</tt>).
@@ -601,11 +601,11 @@ public class Type {
     }
 
     /**
-     * Returns the size of the arguments and of the return value of methods of
+     * Returns the getSize of the arguments and of the return value of methods of
      * this type. This method should only be used for method types.
      * 
-     * @return the size of the arguments (plus one for the implicit this
-     *         argument), argSize, and the size of the return value, retSize,
+     * @return the getSize of the arguments (plus one for the implicit this
+     *         argument), argSize, and the getSize of the return value, retSize,
      *         packed into a single
      *         int i = <tt>(argSize &lt;&lt; 2) | retSize</tt>
      *         (argSize is therefore equal to <tt>i &gt;&gt; 2</tt>,
@@ -793,18 +793,18 @@ public class Type {
     }
 
     // ------------------------------------------------------------------------
-    // Corresponding size and opcodes
+    // Corresponding getSize and opcodes
     // ------------------------------------------------------------------------
 
     /**
-     * Returns the size of values of this type. This method must not be used for
+     * Returns the getSize of values of this type. This method must not be used for
      * method types.
      * 
-     * @return the size of values of this type, i.e., 2 for <tt>long</tt> and
+     * @return the getSize of values of this type, i.e., 2 for <tt>long</tt> and
      *         <tt>double</tt>, 0 for <tt>void</tt> and 1 otherwise.
      */
     public int getSize() {
-        // the size is in byte 0 of 'off' for primitive types (buf == null)
+        // the getSize is in byte 0 of 'off' for primitive types (buf == null)
         return buf == null ? (off & 0xFF) : 1;
     }
 

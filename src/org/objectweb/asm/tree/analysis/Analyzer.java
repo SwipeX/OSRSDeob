@@ -95,7 +95,7 @@ public class Analyzer<V extends Value> implements Opcodes {
      * @param m
      *            the method to be analyzed.
      * @return the symbolic state of the execution stack frame at each bytecode
-     *         instruction of the method. The size of the returned array is
+     *         instruction of the method. The getSize of the returned array is
      *         equal to the number of instructions (and labels) of the method. A
      *         given frame is <tt>null</tt> if and only if the corresponding
      *         instruction cannot be reached (dead code).
@@ -373,7 +373,7 @@ public class Analyzer<V extends Value> implements Opcodes {
      * recently analyzed method.
      * 
      * @return the symbolic state of the execution stack frame at each bytecode
-     *         instruction of the method. The size of the returned array is
+     *         instruction of the method. The getSize of the returned array is
      *         equal to the number of instructions (and labels) of the method. A
      *         given frame is <tt>null</tt> if the corresponding instruction
      *         cannot be reached, or if an error occured during the analysis of
@@ -411,12 +411,12 @@ public class Analyzer<V extends Value> implements Opcodes {
     }
 
     /**
-     * Constructs a new frame with the given size.
+     * Constructs a new frame with the given getSize.
      * 
      * @param nLocals
      *            the maximum number of local variables of the frame.
      * @param nStack
-     *            the maximum stack size of the frame.
+     *            the maximum stack getSize of the frame.
      * @return the created frame.
      */
     protected Frame<V> newFrame(final int nLocals, final int nStack) {

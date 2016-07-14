@@ -34,7 +34,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
 /**
- * A {@link org.objectweb.asm.MethodVisitor} that can be used to approximate method size.
+ * A {@link org.objectweb.asm.MethodVisitor} that can be used to approximate method getSize.
  *
  * @author Eugene Kuleshov
  */

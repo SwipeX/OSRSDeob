@@ -56,13 +56,13 @@ public class LocalVariableAnnotationNode extends TypeAnnotationNode {
     /**
      * The last instructions corresponding to the continuous ranges that make
      * the scope of this local variable (exclusive). This list must have the
-     * same size as the 'start' list. Must not be <tt>null</tt>.
+     * same getSize as the 'start' list. Must not be <tt>null</tt>.
      */
     public List<LabelNode> end;
 
     /**
      * The local variable's index in each range. This list must have the same
-     * size as the 'start' list. Must not be <tt>null</tt>.
+     * getSize as the 'start' list. Must not be <tt>null</tt>.
      */
     public List<Integer> index;
 
@@ -84,10 +84,10 @@ public class LocalVariableAnnotationNode extends TypeAnnotationNode {
      * @param end
      *            the last instructions corresponding to the continuous ranges
      *            that make the scope of this local variable (exclusive). This
-     *            array must have the same size as the 'start' array.
+     *            array must have the same getSize as the 'start' array.
      * @param index
      *            the local variable's index in each range. This array must have
-     *            the same size as the 'start' array.
+     *            the same getSize as the 'start' array.
      * @param desc
      *            the class descriptor of the annotation class.
      */
@@ -110,10 +110,10 @@ public class LocalVariableAnnotationNode extends TypeAnnotationNode {
      * @param end
      *            the last instructions corresponding to the continuous ranges
      *            that make the scope of this local variable (exclusive). This
-     *            array must have the same size as the 'start' array.
+     *            array must have the same getSize as the 'start' array.
      * @param index
      *            the local variable's index in each range. This array must have
-     *            the same size as the 'start' array.
+     *            the same getSize as the 'start' array.
      * @param typePath
      *            the path to the annotated type argument, wildcard bound, array
      *            element type, or static inner type within 'typeRef'. May be

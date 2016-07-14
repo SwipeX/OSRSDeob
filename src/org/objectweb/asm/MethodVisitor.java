@@ -464,10 +464,10 @@ public abstract class MethodVisitor {
     }
 
     /**
-     * Visits the maximum stack size and the maximum number of local variables
+     * Visits the maximum stack getSize and the maximum number of local variables
      * of the method.
      *
-     * @param maxStack  maximum stack size of the method.
+     * @param maxStack  maximum stack getSize of the method.
      * @param maxLocals maximum number of local variables for the method.
      */
     public void visitMaxs(int maxStack, int maxLocals) {

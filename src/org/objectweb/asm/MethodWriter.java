@@ -96,7 +96,7 @@ class MethodWriter extends MethodVisitor {
 
     /**
      * Indicates that the stack map frames must be recomputed from scratch. In
-     * this case the maximum stack size and number of local variables is also
+     * this case the maximum stack getSize and number of local variables is also
      * recomputed from scratch.
      *
      * @see #compute
@@ -104,7 +104,7 @@ class MethodWriter extends MethodVisitor {
     private static final int FRAMES = 0;
 
     /**
-     * Indicates that the maximum stack size and number of local variables must
+     * Indicates that the maximum stack getSize and number of local variables must
      * be automatically computed.
      *
      * @see #compute
@@ -233,7 +233,7 @@ class MethodWriter extends MethodVisitor {
     private ByteVector code = new ByteVector();
 
     /**
-     * Maximum stack size of this method.
+     * Maximum stack getSize of this method.
      */
     private int maxStack;
 
@@ -370,7 +370,7 @@ class MethodWriter extends MethodVisitor {
 
     /*
      * Fields for the control flow graph analysis algorithm (used to compute the
-     * maximum stack size). A control flow graph contains one node per "basic
+     * maximum stack getSize). A control flow graph contains one node per "basic
      * block", and one edge per "jump" from one basic block to another. Each
      * node (i.e., each basic block) is represented by the Label object that
      * corresponds to the first instruction of this basic block. Each node also
@@ -407,18 +407,18 @@ class MethodWriter extends MethodVisitor {
     private Label currentBlock;
 
     /**
-     * The (relative) stack size after the last visited instruction. This size
+     * The (relative) stack getSize after the last visited instruction. This getSize
      * is relative to the beginning of the current basic block, i.e., the true
-     * stack size after the last visited instruction is equal to the
+     * stack getSize after the last visited instruction is equal to the
      * {@link org.objectweb.asm.Label#inputStackTop beginStackSize} of the current basic block
      * plus <tt>stackSize</tt>.
      */
     private int stackSize;
 
     /**
-     * The (relative) maximum stack size after the last visited instruction.
-     * This size is relative to the beginning of the current basic block, i.e.,
-     * the true maximum stack size after the last visited instruction is equal
+     * The (relative) maximum stack getSize after the last visited instruction.
+     * This getSize is relative to the beginning of the current basic block, i.e.,
+     * the true maximum stack getSize after the last visited instruction is equal
      * to the {@link org.objectweb.asm.Label#inputStackTop beginStackSize} of the current basic
      * block plus <tt>stackSize</tt>.
      */
@@ -445,7 +445,7 @@ class MethodWriter extends MethodVisitor {
      *            the internal names of the method's exceptions. May be
      *            <tt>null</tt>.
      * @param computeMaxs
-     *            <tt>true</tt> if the maximum stack size and number of local
+     *            <tt>true</tt> if the maximum stack getSize and number of local
      *            variables must be automatically computed.
      * @param computeFrames
      *            <tt>true</tt> if the stack map tables must be recomputed from
@@ -740,7 +740,7 @@ class MethodWriter extends MethodVisitor {
                 currentBlock.frame.execute(opcode, iin.operand, null, null);
             } else if (opcode != Opcodes.NEWARRAY) {
                 // updates current and max stack sizes only for NEWARRAY
-                // (stack size variation = 0 for BIPUSH or SIPUSH)
+                // (stack getSize variation = 0 for BIPUSH or SIPUSH)
                 int size = stackSize + 1;
                 if (size > maxStackSize) {
                     maxStackSize = size;
@@ -850,7 +850,7 @@ class MethodWriter extends MethodVisitor {
                 currentBlock.frame.execute(opcode, 0, cw, i);
             } else {
                 int size;
-                // computes the stack size variation
+                // computes the stack getSize variation
                 char c = fin.desc.charAt(0);
                 switch (opcode) {
                     case Opcodes.GETSTATIC:
@@ -890,7 +890,7 @@ class MethodWriter extends MethodVisitor {
                 currentBlock.frame.execute(opcode, 0, cw, i);
             } else {
                 /*
-                 * computes the stack size variation. In order not to recompute
+                 * computes the stack getSize variation. In order not to recompute
                  * several times this variation for the same Item, we use the
                  * intVal field of this item to store this variation, once it
                  * has been computed. More precisely this intVal field stores
@@ -941,7 +941,7 @@ class MethodWriter extends MethodVisitor {
                 currentBlock.frame.execute(Opcodes.INVOKEDYNAMIC, 0, cw, i);
             } else {
                 /*
-                 * computes the stack size variation. In order not to recompute
+                 * computes the stack getSize variation. In order not to recompute
                  * several times this variation for the same Item, we use the
                  * intVal field of this item to store this variation, once it
                  * has been computed. More precisely this intVal field stores
@@ -1004,8 +1004,8 @@ class MethodWriter extends MethodVisitor {
                      * while the second one leads to the JSR target.
                      */
                 } else {
-                    // updates current stack size (max stack size unchanged
-                    // because stack size variation always negative in this
+                    // updates current stack getSize (max stack getSize unchanged
+                    // because stack getSize variation always negative in this
                     // case)
                     stackSize += Frame.SIZE[opcode];
                     addSuccessor(stackSize, label);
@@ -1127,7 +1127,7 @@ class MethodWriter extends MethodVisitor {
                 currentBlock.frame.execute(Opcodes.LDC, 0, cw, i);
             } else {
                 int size;
-                // computes the stack size variation
+                // computes the stack getSize variation
                 if (i.type == ClassWriter.LONG || i.type == ClassWriter.DOUBLE) {
                     size = stackSize + 2;
                 } else {
@@ -1224,7 +1224,7 @@ class MethodWriter extends MethodVisitor {
                     labels[i].getFirst().status |= Label.TARGET;
                 }
             } else {
-                // updates current stack size (max stack size unchanged)
+                // updates current stack getSize (max stack getSize unchanged)
                 --stackSize;
                 // adds current block successors
                 addSuccessor(stackSize, dflt);
@@ -1246,8 +1246,8 @@ class MethodWriter extends MethodVisitor {
             if (compute == FRAMES) {
                 currentBlock.frame.execute(Opcodes.MULTIANEWARRAY, manain.dims, cw, i);
             } else {
-                // updates current stack size (max stack size unchanged because
-                // stack size variation always negative or null)
+                // updates current stack getSize (max stack getSize unchanged because
+                // stack getSize variation always negative or null)
                 stackSize += 1 - manain.dims;
             }
         }
@@ -1450,7 +1450,7 @@ class MethodWriter extends MethodVisitor {
                 }
                 // all visited labels are reachable, by definition
                 l.status |= Label.REACHABLE;
-                // updates the (absolute) maximum stack size
+                // updates the (absolute) maximum stack getSize
                 int blockMax = f.inputStack.length + l.outputStackMax;
                 if (blockMax > max) {
                     max = blockMax;
@@ -1585,8 +1585,8 @@ class MethodWriter extends MethodVisitor {
 
             /*
              * control flow analysis algorithm: while the block stack is not
-             * empty, pop a block from this stack, update the max stack size,
-             * compute the true (non relative) begin stack size of the
+             * empty, pop a block from this stack, update the max stack getSize,
+             * compute the true (non relative) begin stack getSize of the
              * successors of this block, and push these successors onto the
              * stack (unless they have already been pushed onto the stack).
              * Note: by hypothesis, the {@link Label#inputStackTop} of the
@@ -1599,10 +1599,10 @@ class MethodWriter extends MethodVisitor {
                 // pops a block from the stack
                 Label l = stack;
                 stack = stack.next;
-                // computes the true (non relative) max stack size of this block
+                // computes the true (non relative) max stack getSize of this block
                 int start = l.inputStackTop;
                 int blockMax = start + l.outputStackMax;
-                // updates the global max stack size
+                // updates the global max stack getSize
                 if (blockMax > max) {
                     max = blockMax;
                 }
@@ -1616,7 +1616,7 @@ class MethodWriter extends MethodVisitor {
                     l = b.successor;
                     // if this successor has not already been pushed...
                     if ((l.status & Label.PUSHED) == 0) {
-                        // computes its true beginning stack size...
+                        // computes its true beginning stack getSize...
                         l.inputStackTop = b.info == Edge.EXCEPTION ? 1 : start
                                 + b.info;
                         // ...and pushes it onto the stack
@@ -1709,7 +1709,7 @@ class MethodWriter extends MethodVisitor {
                 ++i;
             }
         }
-        // computes the stack size (ignores TOP types that are just after
+        // computes the stack getSize (ignores TOP types that are just after
         // a LONG or a DOUBLE)
         for (i = 0; i < stacks.length; ++i) {
             t = stacks[i];
@@ -2010,9 +2010,9 @@ class MethodWriter extends MethodVisitor {
     // ------------------------------------------------------------------------
 
     /**
-     * Returns the size of the bytecode of this method.
+     * Returns the getSize of the bytecode of this method.
      *
-     * @return the size of the bytecode of this method.
+     * @return the getSize of the bytecode of this method.
      */
     final int getSize() {
         if (classReaderOffset != 0) {
@@ -2345,10 +2345,10 @@ class MethodWriter extends MethodVisitor {
      * {@link org.objectweb.asm.Label#resolve} for wide forward jumps, while keeping jump offsets
      * and instruction addresses consistent. This may require to resize other
      * existing instructions, or even to introduce new instructions: for
-     * example, increasing the size of an instruction by 2 at the middle of a
+     * example, increasing the getSize of an instruction by 2 at the middle of a
      * method can increases the offset of an IFEQ instruction from 32766 to
      * 32768, in which case IFEQ 32766 must be replaced with IFNEQ 8 GOTO_W
-     * 32765. This, in turn, may require to increase the size of another jump
+     * 32765. This, in turn, may require to increase the getSize of another jump
      * instruction, and so on... All these operations are handled automatically
      * by this method.
      * <p>
@@ -2378,7 +2378,7 @@ class MethodWriter extends MethodVisitor {
          * If at least one entry has been added during the previous step, go
          * back to the beginning, otherwise stop.
          *
-         * In fact the real algorithm is complicated by the fact that the size
+         * In fact the real algorithm is complicated by the fact that the getSize
          * of TABLESWITCH and LOOKUPSWITCH instructions depends on their
          * position in the bytecode (because of padding). In order to ensure the
          * convergence of the algorithm, the number of bytes to be added or
@@ -2833,8 +2833,8 @@ class MethodWriter extends MethodVisitor {
      * Computes the future value of a bytecode offset.
      * <p>
      * Note: it is possible to have several entries for the same instruction in
-     * the <tt>indexes</tt> and <tt>sizes</tt>: two entries (index=a,size=b) and
-     * (index=a,size=b') are equivalent to a single entry (index=a,size=b+b').
+     * the <tt>indexes</tt> and <tt>sizes</tt>: two entries (index=a,getSize=b) and
+     * (index=a,getSize=b') are equivalent to a single entry (index=a,getSize=b+b').
      *
      * @param indexes
      *            current positions of the instructions to be resized. Each
@@ -2848,7 +2848,7 @@ class MethodWriter extends MethodVisitor {
      *            instruction designated by <tt>indexes</tt>[i] or, if
      *            <tt>sizes</tt>[i] is negative, the <i>last</i> |
      *            <tt>sizes[i]</tt>| bytes of the instruction will be removed
-     *            (the instruction size <i>must not</i> become negative or
+     *            (the instruction getSize <i>must not</i> become negative or
      *            null).
      * @param begin
      *            index of the first byte of the source instruction.
@@ -2886,7 +2886,7 @@ class MethodWriter extends MethodVisitor {
      *            instruction designated by <tt>indexes</tt>[i] or, if
      *            <tt>sizes</tt>[i] is negative, the <i>last</i> |
      *            <tt>sizes[i]</tt>| bytes of the instruction will be removed
-     *            (the instruction size <i>must not</i> become negative or
+     *            (the instruction getSize <i>must not</i> become negative or
      *            null).
      * @param label
      *            the label whose offset must be updated.

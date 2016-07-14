@@ -71,7 +71,7 @@ public class RSAppletStub implements AppletStub {
 
     @Override
     public void appletResize(int width, int height) {
-        // So the environment can set the applet size
+        // So the environment can set the applet getSize
         Applet applet = getAppletContext().getApplet("main");
         if (applet != null)
             applet.resize(width, height);

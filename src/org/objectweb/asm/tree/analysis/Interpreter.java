@@ -65,8 +65,8 @@ public abstract class Interpreter<V extends Value> {
      * @param type
      *            a primitive or reference type, or <tt>null</tt> to represent
      *            an uninitialized value.
-     * @return a value that represents the given type. The size of the returned
-     *         value must be equal to the size of the given type.
+     * @return a value that represents the given type. The getSize of the returned
+     *         value must be equal to the getSize of the given type.
      */
     public abstract V newValue(Type type);
 

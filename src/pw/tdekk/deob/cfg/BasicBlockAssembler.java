@@ -1,6 +1,7 @@
 package pw.tdekk.deob.cfg;
 
 import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class BasicBlockAssembler extends MethodVisitor {
     private final ArrayList<BasicBlock> blocks = new ArrayList<>();
     private final ArrayList<Integer> targets = new ArrayList<>();
     private BasicBlock currentBlock;
+    private String lastIdentifier;
 
     /**
      * @param node - the method from which the blocks will be generated.
@@ -28,6 +30,7 @@ public class BasicBlockAssembler extends MethodVisitor {
         buildTargets();
         currentBlock = new BasicBlock(node);
         node.accept(this);
+        blocks.forEach(b -> b.setIdentifier(lastIdentifier = increment(lastIdentifier)));
     }
 
     /**
@@ -76,7 +79,6 @@ public class BasicBlockAssembler extends MethodVisitor {
      */
     public void visitAbstractInsn(AbstractInsnNode ain) {
         if (targets.contains(node.instructions.indexOf(ain))) {
-            currentBlock.setType(BlockType.TARGET);
             nextBlock();
         }
         if (ain.getOpcode() >= 0) {
@@ -112,6 +114,7 @@ public class BasicBlockAssembler extends MethodVisitor {
      */
     @Override
     public void visitJumpInsn(JumpInsnNode jin) {
+        currentBlock.setType(jin.getOpcode() == Opcodes.GOTO ? BlockType.GOTO : BlockType.JUMP);
         nextBlock();
     }
 
@@ -132,5 +135,18 @@ public class BasicBlockAssembler extends MethodVisitor {
             blocks.add(currentBlock);
             currentBlock = new BasicBlock(node);
         }
+    }
+
+    /**
+     * @param src last value of a block.
+     * @return the incemented value.
+     * Hopefully we dont have a method with 26^2 blocks.
+     */
+    public static String increment(final String src) {
+        if (src == null) return "AA";
+        final int first = (src.charAt(0) - 'A') * 26;
+        final int second = src.charAt(1) - 'A';
+        final int next = (first + second + 1) % (26 * 26);
+        return new String(new byte[]{(byte) (next / 26 + 'A'), (byte) (next % 26 + 'A')});
     }
 }

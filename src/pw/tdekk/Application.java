@@ -3,9 +3,8 @@ package pw.tdekk;
 
 import org.objectweb.asm.tree.*;
 import pw.tdekk.deob.Mutator;
-import pw.tdekk.deob.UnusedMembers;
-import pw.tdekk.deob.UnusedParameters;
-import pw.tdekk.deob.cfg.BasicBlockAssembler;
+import pw.tdekk.deob.usage.UnusedMembers;
+import pw.tdekk.deob.usage.UnusedParameters;
 import pw.tdekk.deob.cfg.ControlFlowGraph;
 import pw.tdekk.rs.AbstractIdentifier;
 import pw.tdekk.rs.Node;
@@ -46,12 +45,14 @@ public class Application {
                 i.Process();
             });
             System.out.println("Executed in: " + (System.currentTimeMillis() - startTime));
+            //collapse blocks
+            for (ClassNode c : classes.values()) {
+                c.methods.forEach(MethodNode::collapseBlocks);
+            }
             Archive.write(new File("test.jar"), classes);
             ClassNode A = classes.get("a");
             MethodNode f = A.methods.get(0);
-//             new BasicBlockAssembler(f).getBlocks().forEach(b-> System.out.println(b));
-            ControlFlowGraph cfg = new ControlFlowGraph(f);
-            cfg.generate();
+            ControlFlowGraph cfg = new ControlFlowGraph(f).generate();
             System.out.println(cfg);
         } catch (Exception e) {
             e.printStackTrace();

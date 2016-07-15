@@ -214,7 +214,7 @@ public class MethodNode extends MethodVisitor {
      */
     private boolean visited;
 
-    public BasicBlock[] blocks;
+    public ArrayList<BasicBlock> blocks;
 
 
     /**
@@ -297,6 +297,14 @@ public class MethodNode extends MethodVisitor {
             this.exceptions.addAll(Arrays.asList(exceptions));
         }
         this.instructions = new InsnList();
+    }
+
+    public void collapseBlocks() {
+        InsnList list = new InsnList();
+        for (BasicBlock block : blocks) {
+            block.getInstructions().forEach(i -> list.add(i));
+        }
+        instructions = list;
     }
 
     public Handle getHandle() {
@@ -593,7 +601,7 @@ public class MethodNode extends MethodVisitor {
 
     @Override
     public void visitEnd() {
-        blocks = new BasicBlockAssembler(this).getBlocks().toArray(new BasicBlock[0]);
+        blocks = new BasicBlockAssembler(this).getBlocks();
     }
 
     /**

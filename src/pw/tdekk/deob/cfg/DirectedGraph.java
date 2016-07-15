@@ -4,11 +4,11 @@ import java.util.*;
 
 /**
  * @author Tim Dekker
- * Adapted from code by: Tyler Sedlar
+ *         Adapted from code by: Tyler Sedlar
  */
 public class DirectedGraph<V, E> implements Iterable<V> {
 
-    private final Map<V, Set<E>> graph = new HashMap<>();
+    private final Map<V, List<E>> graph = new HashMap<>();
 
     @SuppressWarnings("unchecked")
     public Set<E> getEdgeAt(int index) {
@@ -27,11 +27,20 @@ public class DirectedGraph<V, E> implements Iterable<V> {
         return graph.containsKey(vertex) && graph.get(vertex).contains(edge);
     }
 
+    public void removeVertex(V vertex) {
+        graph.remove(vertex);
+    }
+
+    public void transfer(V vertex, V oldVertex) {
+        List<E> edges = edgesFrom(oldVertex);
+        edges.forEach(e -> addEdge(vertex, e));
+    }
+
     public boolean addVertex(V vertex) {
         if (graph.containsKey(vertex)) {
             return false;
         }
-        graph.put(vertex, new HashSet<E>());
+        graph.put(vertex, new ArrayList<>());
         return true;
     }
 
@@ -49,8 +58,8 @@ public class DirectedGraph<V, E> implements Iterable<V> {
         graph.get(start).remove(dest);
     }
 
-    public Set<E> edgesFrom(V node) {
-        return Collections.unmodifiableSet(graph.get(node));
+    public List<E> edgesFrom(V node) {
+        return graph.get(node);
     }
 
     public void graph(DirectedGraph<V, E> graph) {

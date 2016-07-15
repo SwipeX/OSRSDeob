@@ -1,13 +1,9 @@
 package pw.tdekk.deob.cfg;
 
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -19,12 +15,12 @@ public class ControlFlowGraph extends DirectedGraph<BasicBlock, BasicBlock> {
 
     private final BasicBlock head;
     private final MethodNode method;
-    private final BasicBlock[] blocks;
+    private final ArrayList<BasicBlock> blocks;
 
     public ControlFlowGraph(MethodNode mn) {
         this.method = mn;
         blocks = method.blocks;
-        head = blocks[0];
+        head = blocks.get(0);
         head.setType(BlockType.HEADER);
     }
 
@@ -32,7 +28,7 @@ public class ControlFlowGraph extends DirectedGraph<BasicBlock, BasicBlock> {
      * Builds the resulting graph based on block flow.
      * This uses a Depth-First-Search (DFS) algorithm to trace the block execution.
      */
-    public final void generate() {
+    public final ControlFlowGraph generate() {
         for (BasicBlock block : blocks) {
             addVertex(block);
             AbstractInsnNode last = block.getLastInstruction();
@@ -51,7 +47,31 @@ public class ControlFlowGraph extends DirectedGraph<BasicBlock, BasicBlock> {
                 }
             }
         }
+        for (TryCatchBlockNode tcbn : method.tryCatchBlocks) {
+            int start = method.instructions.indexOf(tcbn.start);
+            int end = method.instructions.indexOf(tcbn.end);
+            System.out.println(start + " " + end);
+            List<BasicBlock> filter = blocks.stream().filter(block -> method.instructions.indexOf(block.getInstructions().get(0)) >= start &&
+                    method.instructions.indexOf(block.getLastInstruction()) <= end).collect(Collectors.toList());
+            BasicBlock handler = blockFrom(tcbn.handler);
+            handler.setType(BlockType.HANDLER);
+            filter.forEach(block -> addEdge(block, handler));
+        }
+//May not be work
+//        for (int i = 0; i < blocks.size(); i++) {
+//            BasicBlock block = blocks.get(i);
+//            AbstractInsnNode last = block.getLastInstruction();
+//            if (last.getOpcode() == Opcodes.GOTO) {
+//                BasicBlock next = blockFrom(((JumpInsnNode) last).label);
+//                if (next != null && next.getLastInstruction().getOpcode() == Opcodes.GOTO) {
+//                    join(block, next);
+//                    blocks.remove(next);
+//                }
+//            }
+//        }
+        return this;
     }
+
 
     /**
      * @param ain - the AbstractInsnNode to use to determine the block it is contained in.
@@ -93,7 +113,7 @@ public class ControlFlowGraph extends DirectedGraph<BasicBlock, BasicBlock> {
      * @return All blocks that will exit the method
      */
     public List<BasicBlock> getExits() {
-        return Arrays.stream(blocks).filter(b -> b.getType().equals(BlockType.RETURN)).collect(Collectors.toList());
+        return blocks.stream().filter(b -> b.getType().equals(BlockType.RETURN)).collect(Collectors.toList());
     }
 
     /**
@@ -101,24 +121,56 @@ public class ControlFlowGraph extends DirectedGraph<BasicBlock, BasicBlock> {
      * @return the successor block if it exists.
      */
     private final BasicBlock successor(BasicBlock block) {
-        for (int i = 0; i < blocks.length - 1; i++) {
-            if (blocks[i].equals(block))
-                return blocks[i + 1];
+        for (int i = 0; i < blocks.size() - 1; i++) {
+            if (blocks.get(i).equals(block))
+                return blocks.get(i + 1);
         }
         return null;
     }
 
+    /**
+     * This method joins together two blocks <3, BlockType of the second block will persist.
+     * @Warning may not be fully working
+     *
+     * @param accept Block that will remain
+     * @param insert Block that will be inserted at the end of accept
+     */
+    private final void join(BasicBlock accept, BasicBlock insert) {
+        accept.getInstructions().addAll(insert.getInstructions());
+        accept.setType(insert.getType());
+        transfer(accept, insert);
+        removeVertex(insert);
+    }
+
+    /**
+     * @return a DOT formatting of the graph.
+     */
     public String toString() {
+        Set<String> shapes = new HashSet<String>();
         StringBuilder builder = new StringBuilder();
         builder.append("digraph {\r\n");
         for (BasicBlock block : blocks) {
-            edgesFrom(block).forEach(e -> {
-                builder.append(block.getIdentifier() + " -> " + e.getIdentifier());
-                if (e.getType().equals(BlockType.RETURN))
+            edgesFrom(block).forEach(edge -> {
+                builder.append(block.getIdentifier() + " -> " + edge.getIdentifier());
+                if (edge.getType().equals(BlockType.RETURN)) {
                     builder.append("[color=red,penwidth=3.0]");
+                    shapes.add(edge.getIdentifier() + "[shape=Msquare];");
+                } else if (edge.getType().equals(BlockType.HANDLER)) {
+                    builder.append("[label=\"Handler\"][color=blue,penwidth=3.0]");
+                    shapes.add(edge.getIdentifier() + "[shape=doubleoctagon];");
+                } else if (block.getLastInstruction().getOpcode() == Opcodes.GOTO) {
+                    if (!block.equals(edge)) {
+                        builder.append("[label=\"GOTO\"][color=purple,penwidth=3.0]");
+                    }
+                } else {
+                    if (!successor(block).equals(edge))
+                        builder.append("[label=\"IF\"][color=yellow,penwidth=3.0]");
+                }
                 builder.append(";\r\n");
             });
         }
+        builder.append(head.getIdentifier() + "[shape=Mdiamond];\r\n");
+        shapes.forEach(s -> builder.append(s + "\r\n"));
         return builder.append("}").toString();
     }
 

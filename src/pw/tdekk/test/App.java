@@ -24,7 +24,7 @@ public class App {
 
         try {
             // Use a URLClassLoader because we are loading classes from a jar at a URL
-            URLClassLoader classLoader = new URLClassLoader(new URL[]{new File("bloat.jar").toURI().toURL()});
+            URLClassLoader classLoader = new URLClassLoader(new URL[]{new File("test.jar").toURI().toURL()});
             // Use the parameters to get the correct class, usually always "client"
             Class<?> clientClass = classLoader.loadClass(map.get("initial_class").replace(".class", ""));
             // Create a new instance of the class and cast it to an Applet so we can use it

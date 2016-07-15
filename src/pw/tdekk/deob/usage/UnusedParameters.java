@@ -1,4 +1,4 @@
-package pw.tdekk.deob;
+package pw.tdekk.deob.usage;
 
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -6,6 +6,7 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.Method;
 import org.objectweb.asm.tree.*;
 import pw.tdekk.Application;
+import pw.tdekk.deob.Mutator;
 import pw.tdekk.test.App;
 
 import java.util.ArrayList;

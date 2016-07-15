@@ -65,8 +65,8 @@ public class BasicBlockAssembler extends MethodVisitor {
 
             @Override
             public void visitTryCatchBlock(TryCatchBlockNode tcbn) {
-                //   targets.add(node.instructions.indexOf(tcbn.start));
-                //  targets.add(node.instructions.indexOf(tcbn.end));
+                targets.add(node.instructions.indexOf(tcbn.start));
+                targets.add(node.instructions.indexOf(tcbn.end));
                 targets.add(node.instructions.indexOf(tcbn.handler));
             }
         });
@@ -78,12 +78,12 @@ public class BasicBlockAssembler extends MethodVisitor {
      * @param ain - any instruction
      */
     public void visitAbstractInsn(AbstractInsnNode ain) {
-        if (targets.contains(node.instructions.indexOf(ain))) {
+      if (targets.contains(node.instructions.indexOf(ain))) {
             nextBlock();
         }
-        if (ain.getOpcode() >= 0) {
+       // if (ain.getOpcode() >= 0) {
             currentBlock.getInstructions().add(ain);
-        }
+      //  }
     }
 
     /**

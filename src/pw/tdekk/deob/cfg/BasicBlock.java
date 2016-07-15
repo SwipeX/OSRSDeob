@@ -45,7 +45,7 @@ public class BasicBlock {
 
     public String toString() {
         final String[] result = {" { \r\n"};
-        instructions.forEach(i -> result[0] += Opcodes.OPCODES[i.getOpcode()] + " \r\n");
+        instructions.stream().filter(i-> i.getOpcode()>0).forEach(i -> result[0] += Opcodes.OPCODES[i.getOpcode()] + " \r\n");
         return result[0] + " }\r\n";
     }
 

@@ -2,112 +2,88 @@ package pw.tdekk.deob.usage;
 
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 import pw.tdekk.Application;
 import pw.tdekk.deob.Mutator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * <p>
  * Created by TimD on 6/21/2016.
+ * Entry Points should be considered any method in which code may enter from.
+ * This should eventually be built with a ClassHierarchy & CallGraph.
+ * </p>
+ * <p>
+ * A method should be considered used if:
+ * 1) It is an entry point.
+ * 2) It is called from another method that was used.
+ * 3) It is overridden by a subclass.
+ * 4) It is inherited from a superclass. Note: could be any superclass in hierarchy.
+ * </p>
+ * <p>
+ * ClassHierarchies are associated to a class if the class is contained in the hierarchy.
  */
 public class UnusedMembers implements Mutator {
     private ArrayList<Handle> usedMethods = new ArrayList<>();
-    private ArrayList<Handle> usedFields = new ArrayList<>();
+    private HashMap<ClassNode, ArrayList<ClassHierarchy>> hierarchies = new HashMap<>();
     private int removedCount = 0;
-    private int removedFields = 0;
 
     @Override
     public void mutate() {
+        for (ClassNode node : Application.getClasses().values()) {
+            if (Application.getClasses().values().stream().filter(c -> c.superName.equals(node.name)).count() == 0) {
+                ClassHierarchy hierarchy = new ClassHierarchy(node);
+                addHierarchy(node, hierarchy);
+                hierarchy.getHierarchy().forEach(classNode -> addHierarchy(classNode, hierarchy));
+            }
+        }
         long startTime = System.currentTimeMillis();
         getEntryPoints().forEach(this::visit);
-        ArrayList<MethodNode> toRemove = new ArrayList<>();
-        ArrayList<FieldNode> fields = new ArrayList<>();
-        Application.getClasses().values().forEach(c -> {
-            c.methods.forEach(m -> {
-                if (!usedMethods.contains(m.getHandle())) {
-                    toRemove.add(m);
-                    removedCount++;
-                }
-            });
-            c.fields.forEach(f -> {
-                if (!usedFields.contains(f.getHandle())) {
-                    fields.add(f);
-                    removedFields++;
-                }
-            });
 
-        });
+        ArrayList<MethodNode> toRemove = new ArrayList<>();
+        Application.getClasses().values().forEach(c ->
+                c.methods.forEach(m -> {
+                    if (!usedMethods.contains(m.getHandle())) {
+                        toRemove.add(m);
+                        removedCount++;
+                    }
+                }));
         toRemove.forEach(m -> m.owner.methods.remove(m));
-        fields.forEach(f -> f.owner.fields.remove(f));
-        System.out.println(String.format("Removed %s methods and %s fields in %s ms", removedCount, removedFields, (System.currentTimeMillis() - startTime)));
+        System.out.println(String.format("Removed %s methods in %s ms", removedCount, (System.currentTimeMillis() - startTime)));
+    }
+
+    private void addHierarchy(ClassNode node, ClassHierarchy hierarchy) {
+        ArrayList<ClassHierarchy> list = hierarchies.containsKey(node) ? hierarchies.get(node) : new ArrayList<>();
+        list.add(hierarchy);
+        hierarchies.put(node, list);
     }
 
     private void visit(MethodNode mn) {
+        if (mn == null) return;
         Handle handle = mn.getHandle();
         if (usedMethods.contains(handle)) return;
         usedMethods.add(handle);
-        //subclass methods
-        if ((mn.access & Opcodes.ACC_ABSTRACT) == Opcodes.ACC_ABSTRACT) {
-            Application.getClasses().values().stream().filter(node -> node.superName.equals(mn.owner.name)).forEach(node -> {
-                MethodNode sub = node.getMethod(mn.name, mn.desc);
-                if (sub != null)
-                    visit(sub);
-            });
-        }
         mn.accept(new MethodVisitor() {
-            @Override
-            public void visitFieldInsn(FieldInsnNode fin) {
-                Handle handle = new Handle(0, fin.owner, fin.name, fin.desc, false);
-                if (!usedFields.contains(handle)) {
-                    usedFields.add(handle);
-                    ClassNode node = Application.getClasses().get(fin.owner);
-                    if (node != null) {
-                        String superName = node.superName;
-                        if (Application.getClasses().containsKey(superName)) {
-                            ClassNode superClass = Application.getClasses().get(superName);
-                            if (superClass.getField(fin.name, fin.desc) != null)
-                                usedFields.add(new Handle(0, superName, fin.name, fin.desc, false));
-                        }
-                    }
-                    getSubClasses(fin.owner).forEach(sub -> usedFields.add(new Handle(0, sub.name, fin.name, fin.desc, false)));
-                }
-            }
-
             @Override
             public void visitMethodInsn(MethodInsnNode mn) {
                 if (Application.getClasses().containsKey(mn.owner)) {
                     ClassNode node = Application.getClasses().get(mn.owner);
                     MethodNode method = node.getMethod(mn.name, mn.desc);
                     if (method != null) {
-                        String superName = node.superName;
-                        if (Application.getClasses().containsKey(superName)) {
-                            ClassNode superClass = Application.getClasses().get(superName);
-                            MethodNode superMethod = superClass.getMethod(mn.name, mn.desc);
-                            if (superMethod != null) {
-                                visit(superMethod);
-                            }
-                        }
-                        getSubClasses(node.name).forEach(
-                                sub -> {
-                                    MethodNode superMethod = sub.getMethod(mn.name, mn.desc);
-                                    if (superMethod != null) {
-                                        visit(superMethod);
-                                    }
-                                }
-                        );
                         visit(method);
+                        List<ClassHierarchy> hierarchyList = hierarchies.get(node);
+                        for (ClassHierarchy hierarchy : hierarchyList) {
+                            visit(hierarchy.getOverriding(method));
+                            visit(hierarchy.getOverriden(method));
+                        }
                     }
                 }
             }
         });
-    }
-
-    public List<ClassNode> getSubClasses(String superName) {
-        return Application.getClasses().values().stream().filter(node -> node.superName.equals(superName)).collect(Collectors.toList());
     }
 
     public List<MethodNode> getEntryPoints() {

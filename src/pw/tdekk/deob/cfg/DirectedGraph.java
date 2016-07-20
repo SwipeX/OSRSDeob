@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * @author Tim Dekker
- *         Adapted from code by: Tyler Sedlar
+ * Adapted from code by: Tyler Sedlar
  */
 public class DirectedGraph<V, E> implements Iterable<V> {
 

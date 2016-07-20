@@ -1,6 +1,7 @@
 package pw.tdekk;
 
 
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 import pw.tdekk.deob.Mutator;
 import pw.tdekk.deob.usage.UnusedMembers;
@@ -50,9 +51,11 @@ public class Application {
             System.out.println("Executed in: " + (System.currentTimeMillis() - startTime));
             //collapse blocks
             for (ClassNode c : classes.values()) {
+              //  c.methods.stream().filter(m -> (Opcodes.ACC_ABSTRACT & m.access) != Opcodes.ACC_ABSTRACT).forEach(m -> new ControlFlowGraph(m).generate());
                 c.methods.forEach(MethodNode::collapseBlocks);
             }
             Archive.write(new File("test.jar"), classes);
+            System.out.println("c");
             ClassNode A = classes.get("a");
             MethodNode f = A.methods.get(0);
             ControlFlowGraph cfg = new ControlFlowGraph(f).generate();

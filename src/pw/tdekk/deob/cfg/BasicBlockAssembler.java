@@ -78,12 +78,10 @@ public class BasicBlockAssembler extends MethodVisitor {
      * @param ain - any instruction
      */
     public void visitAbstractInsn(AbstractInsnNode ain) {
-      if (targets.contains(node.instructions.indexOf(ain))) {
+        if (targets.contains(node.instructions.indexOf(ain))) {
             nextBlock();
         }
-       // if (ain.getOpcode() >= 0) {
-            currentBlock.getInstructions().add(ain);
-      //  }
+        currentBlock.getInstructions().add(ain);
     }
 
     /**

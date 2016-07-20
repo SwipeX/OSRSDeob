@@ -8,7 +8,7 @@ import java.util.*;
  */
 public class DirectedGraph<V, E> implements Iterable<V> {
 
-    private final Map<V, List<E>> graph = new HashMap<>();
+    private final Map<V, Set<E>> graph = new HashMap<>();
 
     @SuppressWarnings("unchecked")
     public Set<E> getEdgeAt(int index) {
@@ -31,16 +31,11 @@ public class DirectedGraph<V, E> implements Iterable<V> {
         graph.remove(vertex);
     }
 
-    public void transfer(V vertex, V oldVertex) {
-        List<E> edges = edgesFrom(oldVertex);
-        edges.forEach(e -> addEdge(vertex, e));
-    }
-
     public boolean addVertex(V vertex) {
         if (graph.containsKey(vertex)) {
             return false;
         }
-        graph.put(vertex, new ArrayList<>());
+        graph.put(vertex, new HashSet<>());
         return true;
     }
 
@@ -58,12 +53,17 @@ public class DirectedGraph<V, E> implements Iterable<V> {
         graph.get(start).remove(dest);
     }
 
-    public List<E> edgesFrom(V node) {
+    public Set<E> edgesFrom(V node) {
         return graph.get(node);
     }
 
-    public void graph(DirectedGraph<V, E> graph) {
-        this.graph.putAll(graph.graph);
+    public Set<V> edgesTo(E edge) {
+        final Set set = new HashSet();
+        graph.entrySet().forEach(entry -> {
+            if (entry.getValue().stream().filter(val -> val.equals(edge)).toArray().length > 0)
+                set.add(entry.getKey());
+        });
+        return set;
     }
 
     @Override

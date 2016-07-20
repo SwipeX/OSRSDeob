@@ -1,5 +1,6 @@
 package pw.tdekk.deob.cfg;
 
+import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 
@@ -8,8 +9,7 @@ import java.util.stream.Collectors;
 
 /**
  * Created by TimD on 7/12/2016.
- * This class encompasses a tree using a node based system to
- * keep track of the flow of blocks throughout the method.
+ * This class encompasses a graph to keep track of the flow of blocks throughout the method.
  */
 public class ControlFlowGraph extends DirectedGraph<BasicBlock, BasicBlock> {
 
@@ -18,6 +18,7 @@ public class ControlFlowGraph extends DirectedGraph<BasicBlock, BasicBlock> {
     private final ArrayList<BasicBlock> blocks;
 
     public ControlFlowGraph(MethodNode mn) {
+        System.out.println(mn.name + " " + mn.blocks.size());
         this.method = mn;
         blocks = method.blocks;
         head = blocks.get(0);
@@ -50,25 +51,27 @@ public class ControlFlowGraph extends DirectedGraph<BasicBlock, BasicBlock> {
         for (TryCatchBlockNode tcbn : method.tryCatchBlocks) {
             int start = method.instructions.indexOf(tcbn.start);
             int end = method.instructions.indexOf(tcbn.end);
-            System.out.println(start + " " + end);
             List<BasicBlock> filter = blocks.stream().filter(block -> method.instructions.indexOf(block.getInstructions().get(0)) >= start &&
                     method.instructions.indexOf(block.getLastInstruction()) <= end).collect(Collectors.toList());
             BasicBlock handler = blockFrom(tcbn.handler);
             handler.setType(BlockType.HANDLER);
             filter.forEach(block -> addEdge(block, handler));
         }
-//May not be work
-//        for (int i = 0; i < blocks.size(); i++) {
-//            BasicBlock block = blocks.get(i);
-//            AbstractInsnNode last = block.getLastInstruction();
-//            if (last.getOpcode() == Opcodes.GOTO) {
-//                BasicBlock next = blockFrom(((JumpInsnNode) last).label);
-//                if (next != null && next.getLastInstruction().getOpcode() == Opcodes.GOTO) {
-//                    join(block, next);
-//                    blocks.remove(next);
-//                }
-//            }
-//        }
+        ArrayList<BasicBlock> toRemove = new ArrayList<>();
+        for (int i = 0; i < blocks.size(); i++) {
+            BasicBlock block = blocks.get(i);
+            if (edgesTo(block).size() == 1) {
+                Set<BasicBlock> from = edgesFrom(block);
+                if (from != null && from.size() == 1) {
+                    BasicBlock next = (BasicBlock) from.toArray()[0];
+                    if (next != null && edgesTo(next).size() == 1) {
+                        join(block, next);
+                        toRemove.add(next);
+                    }
+                }
+            }
+        }
+        blocks.removeAll(toRemove);
         return this;
     }
 
@@ -130,15 +133,16 @@ public class ControlFlowGraph extends DirectedGraph<BasicBlock, BasicBlock> {
 
     /**
      * This method joins together two blocks <3, BlockType of the second block will persist.
-     * @Warning may not be fully working
      *
      * @param accept Block that will remain
      * @param insert Block that will be inserted at the end of accept
+     * @Warning may not be fully working
      */
     private final void join(BasicBlock accept, BasicBlock insert) {
         accept.getInstructions().addAll(insert.getInstructions());
         accept.setType(insert.getType());
-        transfer(accept, insert);
+        removeEdge(accept, insert);
+        edgesFrom(insert).forEach(e -> addEdge(accept, e));
         removeVertex(insert);
     }
 
@@ -146,7 +150,7 @@ public class ControlFlowGraph extends DirectedGraph<BasicBlock, BasicBlock> {
      * @return a DOT formatting of the graph.
      */
     public String toString() {
-        Set<String> shapes = new HashSet<String>();
+        Set<String> shapes = new HashSet<>();
         StringBuilder builder = new StringBuilder();
         builder.append("digraph {\r\n");
         for (BasicBlock block : blocks) {
@@ -160,7 +164,7 @@ public class ControlFlowGraph extends DirectedGraph<BasicBlock, BasicBlock> {
                     shapes.add(edge.getIdentifier() + "[shape=doubleoctagon];");
                 } else if (block.getLastInstruction().getOpcode() == Opcodes.GOTO) {
                     if (!block.equals(edge)) {
-                        builder.append("[label=\"GOTO\"][color=purple,penwidth=3.0]");
+                        builder.append("[label=\"GOTO\"][color=green,penwidth=3.0]");
                     }
                 } else {
                     if (!successor(block).equals(edge))

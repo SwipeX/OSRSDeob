@@ -6,8 +6,8 @@ import pw.tdekk.deob.Mutator;
 import pw.tdekk.deob.usage.UnusedMembers;
 import pw.tdekk.deob.usage.UnusedParameters;
 import pw.tdekk.deob.cfg.ControlFlowGraph;
-import pw.tdekk.rs.AbstractIdentifier;
-import pw.tdekk.rs.Node;
+import pw.tdekk.rs.*;
+import pw.tdekk.rs.Character;
 import pw.tdekk.util.Archive;
 import pw.tdekk.util.Crawler;
 
@@ -23,7 +23,8 @@ import java.util.jar.JarFile;
 public class Application {
     private static JarFile OSRS;
     private static Mutator[] mutators = new Mutator[]{new UnusedMembers(), new UnusedParameters()};
-    private static AbstractIdentifier[] identifiers = new AbstractIdentifier[]{new Node()};
+    private static AbstractIdentifier[] identifiers = new AbstractIdentifier[]{
+            new Node(), new CacheableNode(), new RenderableNode(), new Character(), new NpcDefinition(), new Npc(), new Player()};
     private static ConcurrentHashMap<String, ClassNode> classes;
 
     public static void main(String[] args) {
@@ -41,8 +42,10 @@ public class Application {
             System.out.println("Running on OSRS #" + version);
             Arrays.stream(mutators).forEach(Mutator::mutate);
             Arrays.stream(identifiers).forEach(i -> {
-                i.setIdentified(i.Identify());
-                i.Process();
+                ClassNode identified = i.identify(classes.values());
+                System.out.println(identified.name + " -> " + i.getClass().getSimpleName());
+                i.setIdentified(identified);
+                i.process();
             });
             System.out.println("Executed in: " + (System.currentTimeMillis() - startTime));
             //collapse blocks
@@ -61,5 +64,9 @@ public class Application {
 
     public static ConcurrentHashMap<String, ClassNode> getClasses() {
         return classes;
+    }
+
+    public static AbstractIdentifier[] getIdentifiers() {
+        return identifiers;
     }
 }

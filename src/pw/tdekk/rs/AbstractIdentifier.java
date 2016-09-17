@@ -15,14 +15,12 @@ public abstract class AbstractIdentifier {
     ClassNode identified = null;
 
     /**
-     *
      * @param cn ClassNode to test against the validation.
      * @return true if the ClassNode passes the validation boolean.
      */
     public abstract boolean validate(ClassNode cn);
 
     /**
-     *
      * @param classes - the Collection of ClassNodes obtained from an Archive.
      * @return the first ClassNode that matches the #validate method.
      */
@@ -38,17 +36,25 @@ public abstract class AbstractIdentifier {
         identified = cn;
     }
 
+    public static ClassNode internalClass(String external) {
+        for (AbstractIdentifier a : Application.getIdentifiers()) {
+            if (a.getClass().getSimpleName().equals(external))
+                return a.getIdentified();
+        }
+        return null;
+    }
+
     /**
-     *
      * @param external - the name of an external identifier that has already been processed. ex: 'Node'
      * @return - the internal, identified class name IF it has been located and processed.
      */
     public String internalName(String external) {
-        for (AbstractIdentifier a : Application.getIdentifiers()) {
-            if (a.getClass().getSimpleName().equals(external))
-                return a.getIdentified().name;
-        }
-        return null;
+        ClassNode identified = internalClass(external);
+        return identified == null ? null : identified.name;
+    }
+
+    public String internalDesc(String external) {
+        return "L" + internalName(external) + ";";
     }
 
     /**

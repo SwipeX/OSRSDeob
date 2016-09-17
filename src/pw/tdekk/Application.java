@@ -24,8 +24,16 @@ import java.util.jar.JarFile;
 public class Application {
     private static JarFile OSRS;
     private static Mutator[] mutators = new Mutator[]{new UnusedMembers(), new UnusedParameters()};
-    private static AbstractIdentifier[] identifiers = new AbstractIdentifier[]{
-            new Node(), new CacheableNode(), new RenderableNode(), new Character(), new NpcDefinition(), new Npc(), new Player()};
+    private static AbstractIdentifier[] identifiers = {new Node(), new CacheableNode(), new RenderableNode(), new HashTable(),
+            new NodeDeque(), new Queue(), new Cache(), new NodeByteBuffer(), new Tile(), new AnimationSequence(),
+            new Character(), new NpcDefinition(), new Npc(), new Player(), new PlayerDefinition(),
+            new Projectile(), new Item(), new ItemDefinition(), new ItemLayer(), new InteractableObject(),
+            new ObjectDefinition(), new Region(), new Friend(), new IgnoredPlayer(), new ClientData(),
+            new ClanMember(), new Canvas(), new Boundary(), new AnimableGameObject(), new FloorDecoration(),
+            new WallDecoration(), new WidgetNode(), new Widget(), new WidgetActionNode(), new Varpbit(),
+            new World(), new ChatboxMessage(), new ChatboxChannel(), new Sprite(), new ExchangeOffer(),
+            new ItemContainer(), new Client(), new Shell()
+    };
     private static ConcurrentHashMap<String, ClassNode> classes;
 
     public static void main(String[] args) {
@@ -51,15 +59,15 @@ public class Application {
             System.out.println("Executed in: " + (System.currentTimeMillis() - startTime));
             //collapse blocks
             for (ClassNode c : classes.values()) {
-              //  c.methods.stream().filter(m -> (Opcodes.ACC_ABSTRACT & m.access) != Opcodes.ACC_ABSTRACT).forEach(m -> new ControlFlowGraph(m).generate());
+                //  c.methods.stream().filter(m -> (Opcodes.ACC_ABSTRACT & m.access) != Opcodes.ACC_ABSTRACT).forEach(m -> new ControlFlowGraph(m).generate());
                 c.methods.forEach(MethodNode::collapseBlocks);
             }
             Archive.write(new File("test.jar"), classes);
-            System.out.println("c");
-            ClassNode A = classes.get("a");
-            MethodNode f = A.methods.get(0);
-            ControlFlowGraph cfg = new ControlFlowGraph(f).generate();
-            System.out.println(cfg);
+
+            // ClassNode A = classes.get("a");
+            //  MethodNode f = A.methods.get(0);
+            // ControlFlowGraph cfg = new ControlFlowGraph(f).generate();
+            // System.out.println(cfg);
         } catch (Exception e) {
             e.printStackTrace();
         }

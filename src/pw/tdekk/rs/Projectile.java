@@ -1,0 +1,13 @@
+package pw.tdekk.rs;
+
+
+import org.objectweb.asm.tree.ClassNode;
+
+
+public class Projectile extends AbstractIdentifier {
+
+    @Override
+    public boolean validate(ClassNode cn) {
+        return cn.superName.equals(internalName("RenderableNode")) && cn.getFieldTypeCount() == 4 &&
+                cn.fieldCount("Z") == 1 && cn.fieldCount(internalDesc("AnimationSequence")) == 1;
+      }}

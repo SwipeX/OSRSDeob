@@ -8,7 +8,7 @@ import org.objectweb.asm.tree.ClassNode;
 public class ClanMember extends AbstractIdentifier {
     @Override
     public boolean validate(ClassNode cn) {
-        return cn.superName.equals(internalName("Node")) && cn.fieldCount("Ljava/lang/String;") == 2 &&
+        return cn.superName.equals(getMapping("Node")) && cn.fieldCount("Ljava/lang/String;") == 2 &&
                 cn.fieldCount("B") > 0 && cn.fieldCount("I") > 0;
     }
 }

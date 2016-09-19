@@ -13,4 +13,9 @@ public class Node extends AbstractIdentifier {
     public boolean validate(ClassNode cn) {
         return cn.ownerless() && cn.fields.size() == 3 && cn.fieldCount("J") == 1 && cn.fieldCount("L" + cn.name + ";") == 2;
     }
+
+    public void process() {
+        super.process();
+        easyHook("uid", "J");
+    }
 }

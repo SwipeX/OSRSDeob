@@ -14,6 +14,7 @@ import pw.tdekk.util.Crawler;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarFile;
 
@@ -52,9 +53,14 @@ public class Application {
             Arrays.stream(mutators).forEach(Mutator::mutate);
             Arrays.stream(identifiers).forEach(i -> {
                 ClassNode identified = i.identify(classes.values());
-                System.out.println(identified.name + " -> " + i.getClass().getSimpleName());
-                i.setIdentified(identified);
-                i.process();
+                if (identified != null) {
+                    i.process();
+                }
+            });
+            Arrays.sort(identifiers, (a, b) -> a.getClass().getSimpleName().compareTo(b.getClass().getSimpleName()));
+            Arrays.stream(identifiers).forEach(i-> {
+                System.out.println(i.getIdentified().name + " -> "+i.getClass().getSimpleName());
+                i.getHooks().forEach(System.out::println);
             });
             System.out.println("Executed in: " + (System.currentTimeMillis() - startTime));
             //collapse blocks

@@ -7,5 +7,5 @@ public class AnimationSequence extends AbstractIdentifier {
 
     @Override
     public boolean validate(ClassNode cn) {
-        return cn.superName.equals(internalName("CacheableNode")) && cn.getFieldTypeCount() == 3 && cn.fieldCount("Z") == 1;
+        return cn.superName.equals(getMapping("CacheableNode")) && cn.getFieldTypeCount() == 3 && cn.fieldCount("Z") == 1;
       }}

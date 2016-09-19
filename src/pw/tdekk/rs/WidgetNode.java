@@ -7,5 +7,5 @@ public class WidgetNode extends AbstractIdentifier {
 
     @Override
     public boolean validate(ClassNode cn) {
-        return cn.superName.equals(internalName("Node")) && cn.fieldCount("I") == 2 && cn.fieldCount("Z") == 1;
+        return cn.superName.equals(getMapping("Node")) && cn.fieldCount("I") == 2 && cn.fieldCount("Z") == 1;
       }}

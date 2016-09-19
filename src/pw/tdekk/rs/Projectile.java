@@ -8,6 +8,6 @@ public class Projectile extends AbstractIdentifier {
 
     @Override
     public boolean validate(ClassNode cn) {
-        return cn.superName.equals(internalName("RenderableNode")) && cn.getFieldTypeCount() == 4 &&
+        return cn.superName.equals(getMapping("RenderableNode")) && cn.getFieldTypeCount() == 4 &&
                 cn.fieldCount("Z") == 1 && cn.fieldCount(internalDesc("AnimationSequence")) == 1;
       }}

@@ -10,5 +10,5 @@ public class Varpbit extends AbstractIdentifier {
 
     @Override
     public boolean validate(ClassNode cn) {
-        return cn.superName.equals(internalName("CacheableNode")) && cn.getFieldTypeCount() == 1 && cn.fieldCount("I") == 3;
+        return cn.superName.equals(getMapping("CacheableNode")) && cn.getFieldTypeCount() == 1 && cn.fieldCount("I") == 3;
       }}

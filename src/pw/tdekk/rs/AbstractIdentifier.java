@@ -2,17 +2,42 @@ package pw.tdekk.rs;
 
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 import pw.tdekk.Application;
+import pw.tdekk.rs.hook.Hook;
 
-import java.util.Collection;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * Created by timde on 7/2/2016.
  * Classes should extend this in order to identfy a new internal class.
  */
 public abstract class AbstractIdentifier {
-    ClassNode identified = null;
+    private static HashMap<String, String> mapping = new HashMap<>();
+    private ClassNode identified = null;
+    private List<Hook> hooks = new ArrayList<>();
+
+    public List<Hook> getHooks(){
+        return hooks;
+    }
+
+    protected void addHook(String alias, String owner, String name, String desc) {
+        hooks.add(new Hook(alias, owner, name, desc, Hook.Type.FIELD));
+    }
+
+    protected void addHook(String alias, FieldNode fn) {
+        addHook(alias, fn.owner.name, fn.name, fn.desc);
+    }
+
+    protected void easyHook(String alias, String desc) {
+        Optional<FieldNode> optional = identified.fields.stream().filter(fn -> fn.desc.equals(desc)).findFirst();
+        if (optional.isPresent()) {
+            FieldNode fn = optional.get();
+            addHook(alias, fn);
+        }
+    }
 
     /**
      * @param cn ClassNode to test against the validation.
@@ -25,7 +50,13 @@ public abstract class AbstractIdentifier {
      * @return the first ClassNode that matches the #validate method.
      */
     public ClassNode identify(Collection<ClassNode> classes) {
-        return classes.stream().filter(this::validate).findFirst().get();
+        Optional<ClassNode> optional = classes.stream().filter(this::validate).findFirst();
+        if (optional.isPresent()) {
+            ClassNode node = optional.get();
+            mapping.put(getClass().getSimpleName(), node.name);
+            return identified = node;
+        }
+        return null;
     }
 
     public ClassNode getIdentified() {
@@ -36,25 +67,9 @@ public abstract class AbstractIdentifier {
         identified = cn;
     }
 
-    public static ClassNode internalClass(String external) {
-        for (AbstractIdentifier a : Application.getIdentifiers()) {
-            if (a.getClass().getSimpleName().equals(external))
-                return a.getIdentified();
-        }
-        return null;
-    }
-
-    /**
-     * @param external - the name of an external identifier that has already been processed. ex: 'Node'
-     * @return - the internal, identified class name IF it has been located and processed.
-     */
-    public String internalName(String external) {
-        ClassNode identified = internalClass(external);
-        return identified == null ? null : identified.name;
-    }
 
     public String internalDesc(String external) {
-        return "L" + internalName(external) + ";";
+        return "L" + getMapping(external) + ";";
     }
 
     /**
@@ -70,6 +85,13 @@ public abstract class AbstractIdentifier {
         }
     }
 
+    public static String getMapping(String internal) {
+        return mapping.get(internal);
+    }
+
+    public static ClassNode getMappedNode(String internal) {
+        return Application.getClasses().get(getMapping(internal));
+    }
 
     public MethodVisitor[] getVisitors() {
         return null;

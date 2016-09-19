@@ -8,6 +8,6 @@ public class Tile extends AbstractIdentifier {
 
     @Override
     public boolean validate(ClassNode cn) {
-        return cn.superName.equals(internalName("Node")) && cn.fieldCount("Z") == 3;
+        return cn.superName.equals(getMapping("Node")) && cn.fieldCount("Z") == 3;
     }
 }

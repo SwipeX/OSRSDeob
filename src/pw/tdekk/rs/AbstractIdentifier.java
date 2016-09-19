@@ -2,6 +2,7 @@ package pw.tdekk.rs;
 
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 import pw.tdekk.Application;
@@ -19,16 +20,22 @@ public abstract class AbstractIdentifier {
     private ClassNode identified = null;
     private List<Hook> hooks = new ArrayList<>();
 
-    public List<Hook> getHooks(){
+    public List<Hook> getHooks() {
         return hooks;
     }
 
     protected void addHook(String alias, String owner, String name, String desc) {
-        hooks.add(new Hook(alias, owner, name, desc, Hook.Type.FIELD));
+        Hook hook = new Hook(alias, owner, name, desc, Hook.Type.FIELD);
+        if (!hooks.contains(hook))
+            hooks.add(hook);
     }
 
     protected void addHook(String alias, FieldNode fn) {
         addHook(alias, fn.owner.name, fn.name, fn.desc);
+    }
+
+    protected void addHook(String alias, FieldInsnNode fn) {
+        addHook(alias, fn.owner, fn.name, fn.desc);
     }
 
     protected void easyHook(String alias, String desc) {
@@ -68,8 +75,17 @@ public abstract class AbstractIdentifier {
     }
 
 
-    public String internalDesc(String external) {
+    public static String internalDesc(String external) {
+
         return "L" + getMapping(external) + ";";
+    }
+
+    public static String externalDesc(String internal) {
+        for (Map.Entry<String, String> entry : mapping.entrySet()) {
+            if (entry.getValue().equals(internal))
+                return entry.getKey();
+        }
+        return null;
     }
 
     /**

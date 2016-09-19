@@ -6,5 +6,5 @@ public class Item extends AbstractIdentifier {
 
     @Override
     public boolean validate(ClassNode cn) {
-        return cn.superName.equals(getMapping("RenderableNode")) && cn.getFieldTypeCount() == 1 && cn.fieldCount("I") == 2;
+        return cn.superName.equals(getMapping("Entity")) && cn.getFieldTypeCount() == 1 && cn.fieldCount("I") == 2;
       }}

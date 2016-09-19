@@ -10,4 +10,9 @@ public class NpcDefinition extends AbstractIdentifier {
     public boolean validate(ClassNode cn) {
         return cn.superName.equals(getMapping("CacheableNode")) && cn.fieldCount("Z") >= 4 && cn.fieldCount("Z") < 7;
     }
+
+    public void process(){
+        super.process();
+        easyHook("name","Ljava/lang/String;");
+    }
 }

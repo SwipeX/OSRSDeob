@@ -10,4 +10,9 @@ public class Npc extends AbstractIdentifier {
     public boolean validate(ClassNode cn) {
         return cn.fieldCount("L" + getMapping("NpcDefinition") + ";") == 1;
     }
+
+    public void process(){
+        super.process();
+        easyHook("definition", "L" + getMapping("NpcDefinition") + ";");
+    }
 }

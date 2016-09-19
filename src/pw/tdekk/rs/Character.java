@@ -8,7 +8,7 @@ import org.objectweb.asm.tree.ClassNode;
 public class Character extends AbstractIdentifier {
     @Override
     public boolean validate(ClassNode cn) {
-        return cn.superName.equals(getMapping("RenderableNode"))  && cn.fieldCount("Z") >= 1 &&
+        return cn.superName.equals(getMapping("Entity"))  && cn.fieldCount("Z") >= 1 &&
                 cn.fieldCount("Ljava/lang/String;") == 1;
     }
 }

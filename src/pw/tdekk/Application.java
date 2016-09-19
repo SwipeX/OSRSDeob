@@ -1,12 +1,10 @@
 package pw.tdekk;
 
 
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.*;
 import pw.tdekk.deob.Mutator;
 import pw.tdekk.deob.usage.UnusedMembers;
 import pw.tdekk.deob.usage.UnusedParameters;
-import pw.tdekk.deob.cfg.ControlFlowGraph;
 import pw.tdekk.rs.*;
 import pw.tdekk.rs.Character;
 import pw.tdekk.util.Archive;
@@ -14,7 +12,6 @@ import pw.tdekk.util.Crawler;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.jar.JarFile;
 
@@ -25,9 +22,9 @@ import java.util.jar.JarFile;
 public class Application {
     private static JarFile OSRS;
     private static Mutator[] mutators = new Mutator[]{new UnusedMembers(), new UnusedParameters()};
-    private static AbstractIdentifier[] identifiers = {new Node(), new CacheableNode(), new RenderableNode(), new HashTable(),
+    private static AbstractIdentifier[] identifiers = {new Node(), new CacheableNode(), new Entity(), new HashTable(),
             new NodeDeque(), new Queue(), new Cache(), new NodeByteBuffer(), new Tile(), new AnimationSequence(),
-            new Character(), new NpcDefinition(), new Npc(), new Player(), new PlayerDefinition(),
+            new Character(), new NpcDefinition(), new Npc(), new PlayerDefinition(), new Player(),
             new Projectile(), new Item(), new ItemDefinition(), new ItemLayer(), new InteractableObject(),
             new ObjectDefinition(), new Region(), new Friend(), new IgnoredPlayer(), new ClientData(),
             new ClanMember(), new Canvas(), new Boundary(), new AnimableGameObject(), new FloorDecoration(),

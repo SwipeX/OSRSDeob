@@ -1,5 +1,7 @@
 package pw.tdekk.rs.hook;
 
+import pw.tdekk.rs.AbstractIdentifier;
+
 /**
  * Created by timde on 7/2/2016.
  */
@@ -44,30 +46,54 @@ public class Hook {
     }
 
     public String toString() {
-        return String.format("%s %s = %s.%s", internalize(desc), alias, owner, name);
+        return String.format("  +  %s %s = %s.%s", internalize(desc), alias, owner, name);
     }
 
     private String internalize(String desc) {
+        int depth = desc.length() - (desc = desc.replace("[", "")).length();
         switch (desc) {
             case "B":
-                return "byte";
+                return "byte" + array(depth, "");
             case "I":
-                return "int";
+                return "int" + array(depth, "");
             case "J":
-                return "long";
+                return "long" + array(depth, "");
             case "D":
-                return "double";
+                return "double" + array(depth, "");
             case "F":
-                return "float";
+                return "float" + array(depth, "");
             case "Z":
-                return "boolean";
+                return "boolean" + array(depth, "");
             case "S":
-                return "short";
+                return "short" + array(depth, "");
             default: {
-                if (desc.contains("."))
-                    desc = desc.substring(desc.lastIndexOf('.'));
-                return desc;
+                if (desc.contains("/")) {
+                    desc = desc.substring(desc.lastIndexOf('/') + 1, desc.length() - 1);
+                } else if (desc.length() < 5) {
+                    desc = AbstractIdentifier.externalDesc(desc.substring(1, desc.length() - 1));
+                }
+                return desc + array(depth, "");
             }
         }
+    }
+
+    private String array(int depth, String val) {
+        if (depth == 0) return val;
+        return array(depth - 1, val + "[]");
+    }
+
+    /**
+     * Hooks are defined by their names! cannot have conflicting names!
+     */
+    public int hashCode() {
+        return alias.hashCode();
+    }
+
+    public boolean equals(Object o) {
+        if (o instanceof Hook) {
+            Hook hook = (Hook) o;
+            if (hook.alias.equals(alias)) return true;
+        }
+        return false;
     }
 }

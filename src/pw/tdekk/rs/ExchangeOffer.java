@@ -15,4 +15,9 @@ public class ExchangeOffer extends AbstractIdentifier {
     public boolean validate(ClassNode cn) {
         return cn.ownerless() && cn.getFieldTypeCount() == 2 && cn.fieldCount("B") == 1 && cn.fieldCount("I") > 3;
     }
+
+    public void process(){
+        super.process();
+        easyHook("state", "B");
+    }
 }

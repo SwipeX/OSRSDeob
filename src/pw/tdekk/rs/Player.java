@@ -12,4 +12,10 @@ public class Player extends AbstractIdentifier {
         return cn.superName.equals(getMapping("Character")) && cn.fieldCount("Ljava/lang/String;") >= 1 &&
                 cn.fieldCount("Z") >= 1 && cn.getAbnormalFieldCount() == 2;
     }
+
+    public void process() {
+        super.process();
+        easyHook("definition", "L" + getMapping("PlayerDefinition") + ";");
+        easyHook("name", "Ljava/lang/String;");
+    }
 }

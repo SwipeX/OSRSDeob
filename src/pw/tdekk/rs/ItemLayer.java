@@ -7,5 +7,5 @@ public class ItemLayer extends AbstractIdentifier {
 
     @Override
     public boolean validate(ClassNode cn) {
-        return cn.ownerless() && cn.getFieldTypeCount() == 2 && cn.fieldCount(internalDesc("RenderableNode")) == 3;
+        return cn.ownerless() && cn.getFieldTypeCount() == 2 && cn.fieldCount(internalDesc("Entity")) == 3;
       }}
